@@ -118,7 +118,7 @@ export const INITIAL_CARDS: CardItem[] = [
     answer: 'En 6 columnas.',
     numericAnswer: 6,
     unit: 'columnas',
-    toleranceMargin: 0,
+    toleranceMargin: 1,
     explanation: 'El plan ideado por San Martín dividió la fuerza en 6 columnas: 2 principales (Paso de Los Patos y Paso de Uspallata) y 4 secundarias para distraer y dividir las defensas realistas.',
     historicalContext: 'Esta magistral estrategia de despiste (conocida como la "Guerra de Zapa") desorientó completamente al gobernador realista Marcó del Pont en Chile.',
     imageUrl: andesCrossing,
