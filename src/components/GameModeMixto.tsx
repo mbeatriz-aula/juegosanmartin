@@ -350,105 +350,101 @@ export const GameModeMixto: React.FC<GameModeMixtoProps> = ({
   const rank = getRankBadge(accuracyPercentage);
 
   return (
-    <div className="space-y-6 text-[#2d2a26]">
+    <div className="space-y-2.5 text-[#2d2a26]">
       {/* TOP CONTROL BAR: TIME SELECTOR, TIMER & RUNNING SCORE */}
-      <div className="bg-[#f3efe6] border-2 border-[#2d2a26] p-4 shadow-bento flex flex-col xl:flex-row xl:items-center justify-between gap-4">
+      <div className="bg-[#f3efe6] border-2 border-[#2d2a26] p-2 sm:p-2.5 shadow-bento flex flex-col lg:flex-row lg:items-center justify-between gap-2">
         {/* Left: Mode Title & Duration Selector with Clear Indication */}
-        <div className="flex flex-col gap-2">
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="bg-[#d62828] text-white font-sans font-black text-xs uppercase tracking-widest px-3 py-1.5 border-2 border-[#2d2a26] flex items-center gap-1.5 shadow-bento-sm">
-              <Shuffle className="w-4 h-4 text-amber-300" />
-              MODO MIXTO
-            </span>
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="bg-[#d62828] text-white font-sans font-black text-[10px] uppercase tracking-wider px-2 py-1 border border-[#2d2a26] flex items-center gap-1 shadow-bento-sm shrink-0">
+            <Shuffle className="w-3.5 h-3.5 text-amber-300" />
+            MODO MIXTO
+          </span>
 
-            {/* Clear indication that the player can choose the minutes */}
-            <div className="flex items-center gap-1.5 text-xs font-black uppercase text-[#1d3557] bg-white px-3 py-1 border-2 border-[#2d2a26] shadow-bento-sm">
-              <Timer className="w-4 h-4 text-[#d62828]" />
-              <span>Elegí la cantidad de minutos para jugar:</span>
-            </div>
+          {/* Clear indication that the player can choose the minutes */}
+          <div className="flex items-center gap-1 text-[10px] font-black uppercase text-[#1d3557] bg-white px-2 py-0.5 border border-[#2d2a26] shadow-bento-sm">
+            <Timer className="w-3 h-3 text-[#d62828]" />
+            <span>Elegí minutos:</span>
           </div>
 
           {/* Time Selector: 3 Min first, 5 Min second, 7 Min third. NO MODO LIBRE! */}
-          <div className="flex flex-wrap items-center gap-2">
-            <div className="flex items-center gap-1 bg-white p-1 border-2 border-[#2d2a26] shadow-bento-sm text-xs font-bold">
-              {/* 3 Min (Primero) */}
-              <button
-                onClick={() => handleSelectDuration(3)}
-                className={`px-3 py-1.5 uppercase text-xs font-black transition-all flex items-center gap-1 ${
-                  selectedDurationMinutes === 3
-                    ? 'bg-[#1d3557] text-white shadow-sm'
-                    : 'text-[#2d2a26] hover:bg-[#f3efe6]'
-                }`}
-                title="Elegir partida de 3 minutos"
-              >
-                <span>3 Min</span>
-                {selectedDurationMinutes === 3 && <CheckCircle2 className="w-3.5 h-3.5 text-amber-300" />}
-              </button>
+          <div className="flex items-center gap-0.5 bg-white p-0.5 border border-[#2d2a26] shadow-bento-sm text-[10px] font-bold">
+            {/* 3 Min (Primero) */}
+            <button
+              onClick={() => handleSelectDuration(3)}
+              className={`px-2 py-0.5 uppercase text-[10px] font-black transition-all flex items-center gap-0.5 ${
+                selectedDurationMinutes === 3
+                  ? 'bg-[#1d3557] text-white'
+                  : 'text-[#2d2a26] hover:bg-[#f3efe6]'
+              }`}
+              title="Elegir partida de 3 minutos"
+            >
+              <span>3 Min</span>
+              {selectedDurationMinutes === 3 && <CheckCircle2 className="w-2.5 h-2.5 text-amber-300" />}
+            </button>
 
-              {/* 5 Min (Segundo) */}
-              <button
-                onClick={() => handleSelectDuration(5)}
-                className={`px-3 py-1.5 uppercase text-xs font-black transition-all flex items-center gap-1 ${
-                  selectedDurationMinutes === 5
-                    ? 'bg-[#1d3557] text-white shadow-sm'
-                    : 'text-[#2d2a26] hover:bg-[#f3efe6]'
-                }`}
-                title="Elegir partida de 5 minutos"
-              >
-                <span>5 Min</span>
-                {selectedDurationMinutes === 5 && <CheckCircle2 className="w-3.5 h-3.5 text-amber-300" />}
-              </button>
+            {/* 5 Min (Segundo) */}
+            <button
+              onClick={() => handleSelectDuration(5)}
+              className={`px-2 py-0.5 uppercase text-[10px] font-black transition-all flex items-center gap-0.5 ${
+                selectedDurationMinutes === 5
+                  ? 'bg-[#1d3557] text-white'
+                  : 'text-[#2d2a26] hover:bg-[#f3efe6]'
+              }`}
+              title="Elegir partida de 5 minutos"
+            >
+              <span>5 Min</span>
+              {selectedDurationMinutes === 5 && <CheckCircle2 className="w-2.5 h-2.5 text-amber-300" />}
+            </button>
 
-              {/* 7 Min (Por último) */}
-              <button
-                onClick={() => handleSelectDuration(7)}
-                className={`px-3 py-1.5 uppercase text-xs font-black transition-all flex items-center gap-1 ${
-                  selectedDurationMinutes === 7
-                    ? 'bg-[#1d3557] text-white shadow-sm'
-                    : 'text-[#2d2a26] hover:bg-[#f3efe6]'
-                }`}
-                title="Elegir partida de 7 minutos"
-              >
-                <span>7 Min</span>
-                {selectedDurationMinutes === 7 && <CheckCircle2 className="w-3.5 h-3.5 text-amber-300" />}
-              </button>
-            </div>
-
-            {!hasGameStarted ? (
-              <span className="text-[11px] font-black uppercase text-amber-900 bg-amber-200/90 px-2.5 py-1 border border-amber-600 shadow-bento-sm flex items-center gap-1">
-                <Play className="w-3.5 h-3.5 fill-current text-amber-800" />
-                Ninguno comenzará hasta presionar PLAY
-              </span>
-            ) : isTimerRunning ? (
-              <span className="text-[11px] font-black uppercase text-emerald-800 bg-emerald-100 px-2.5 py-1 border border-emerald-600 shadow-bento-sm flex items-center gap-1">
-                <Clock className="w-3.5 h-3.5 text-emerald-700" />
-                Partida en curso ({selectedDurationMinutes} min)
-              </span>
-            ) : (
-              <span className="text-[11px] font-black uppercase text-amber-900 bg-amber-100 px-2.5 py-1 border border-amber-600 shadow-bento-sm flex items-center gap-1">
-                <Pause className="w-3.5 h-3.5 text-amber-800" />
-                Partida pausada
-              </span>
-            )}
+            {/* 7 Min (Por último) */}
+            <button
+              onClick={() => handleSelectDuration(7)}
+              className={`px-2 py-0.5 uppercase text-[10px] font-black transition-all flex items-center gap-0.5 ${
+                selectedDurationMinutes === 7
+                  ? 'bg-[#1d3557] text-white'
+                  : 'text-[#2d2a26] hover:bg-[#f3efe6]'
+              }`}
+              title="Elegir partida de 7 minutos"
+            >
+              <span>7 Min</span>
+              {selectedDurationMinutes === 7 && <CheckCircle2 className="w-2.5 h-2.5 text-amber-300" />}
+            </button>
           </div>
+
+          {!hasGameStarted ? (
+            <span className="text-[10px] font-black uppercase text-amber-900 bg-amber-200/90 px-2 py-0.5 border border-amber-600 shadow-bento-sm hidden sm:inline-flex items-center gap-1">
+              <Play className="w-2.5 h-2.5 fill-current text-amber-800" />
+              Presiona PLAY para iniciar
+            </span>
+          ) : isTimerRunning ? (
+            <span className="text-[10px] font-black uppercase text-emerald-800 bg-emerald-100 px-2 py-0.5 border border-emerald-600 shadow-bento-sm hidden sm:inline-flex items-center gap-1">
+              <Clock className="w-2.5 h-2.5 text-emerald-700" />
+              En curso ({selectedDurationMinutes} min)
+            </span>
+          ) : (
+            <span className="text-[10px] font-black uppercase text-amber-900 bg-amber-100 px-2 py-0.5 border border-amber-600 shadow-bento-sm hidden sm:inline-flex items-center gap-1">
+              <Pause className="w-2.5 h-2.5 text-amber-800" />
+              Pausada
+            </span>
+          )}
         </div>
 
-        {/* Center: Live Timer Box */}
-        <div
-          className={`flex items-center gap-3 px-4 py-2 border-2 border-[#2d2a26] shadow-bento-sm transition-all ${
-            !hasGameStarted
-              ? 'bg-amber-100 border-amber-700 text-[#2d2a26]'
-              : isTimerRunning && timeRemaining < 60
-              ? 'bg-red-500 text-white animate-pulse'
-              : !isTimerRunning
-              ? 'bg-amber-50 text-[#2d2a26]'
-              : 'bg-white text-[#2d2a26]'
-          }`}
-        >
-          <div className="flex flex-col">
-            <div className="flex items-center gap-1.5 font-mono text-2xl sm:text-3xl font-black tracking-tight">
+        {/* Center: Live Timer Box & Score Counters */}
+        <div className="flex items-center gap-2 self-start lg:self-center">
+          <div
+            className={`flex items-center gap-2 px-2.5 py-1 border border-[#2d2a26] shadow-bento-sm transition-all ${
+              !hasGameStarted
+                ? 'bg-amber-100 border-amber-700 text-[#2d2a26]'
+                : isTimerRunning && timeRemaining < 60
+                ? 'bg-red-500 text-white animate-pulse'
+                : !isTimerRunning
+                ? 'bg-amber-50 text-[#2d2a26]'
+                : 'bg-white text-[#2d2a26]'
+            }`}
+          >
+            <div className="flex items-center gap-1 font-mono text-base sm:text-lg font-black tracking-tight">
               <Clock
-                className={`w-6 h-6 ${
+                className={`w-4 h-4 ${
                   timeRemaining < 60 && hasGameStarted && isTimerRunning
                     ? 'text-white'
                     : 'text-[#d62828]'
@@ -456,95 +452,88 @@ export const GameModeMixto: React.FC<GameModeMixtoProps> = ({
               />
               <span>{formatTime(timeRemaining)}</span>
             </div>
-            <span className="text-[10px] font-black uppercase tracking-wider text-stone-600">
-              {!hasGameStarted
-                ? `Formato: ${selectedDurationMinutes} min (en espera)`
-                : isTimerRunning
-                ? 'Tiempo restante'
-                : 'En pausa'}
-            </span>
-          </div>
 
-          <div className="flex items-center gap-1.5">
-            <button
-              onClick={handleTogglePlayPause}
-              className={`px-3 py-2 border-2 border-[#2d2a26] text-xs font-black uppercase flex items-center gap-1.5 shadow-bento-sm transition-all active:translate-y-0.5 ${
-                !hasGameStarted
-                  ? 'bg-[#2a9d8f] hover:bg-[#21867a] text-white animate-bounce'
-                  : isTimerRunning
-                  ? 'bg-amber-400 hover:bg-amber-300 text-stone-900'
-                  : 'bg-[#2a9d8f] hover:bg-[#21867a] text-white'
-              }`}
-              title={
-                !hasGameStarted
-                  ? `Iniciar partida de ${selectedDurationMinutes} minutos`
-                  : isTimerRunning
-                  ? 'Pausar Tiempo'
-                  : 'Reanudar Tiempo'
-              }
-            >
-              {!hasGameStarted ? (
-                <>
-                  <Play className="w-4 h-4 fill-current text-white" />
-                  <span>PLAY</span>
-                </>
-              ) : isTimerRunning ? (
-                <>
-                  <Pause className="w-4 h-4" />
-                  <span className="hidden sm:inline">Pausar</span>
-                </>
-              ) : (
-                <>
-                  <Play className="w-4 h-4 fill-current" />
-                  <span className="hidden sm:inline">Reanudar</span>
-                </>
-              )}
-            </button>
-
-            {hasGameStarted && (
+            <div className="flex items-center gap-1">
               <button
-                onClick={handleResetGame}
-                className="p-2 bg-[#f3efe6] hover:bg-[#2d2a26] hover:text-white text-[#2d2a26] border-2 border-[#2d2a26] shadow-bento-sm transition-colors"
-                title="Reiniciar y volver a configuración de inicio"
+                onClick={handleTogglePlayPause}
+                className={`px-2.5 py-1 border border-[#2d2a26] text-[10px] font-black uppercase flex items-center gap-1 shadow-bento-sm transition-all active:translate-y-0.5 ${
+                  !hasGameStarted
+                    ? 'bg-[#2a9d8f] hover:bg-[#21867a] text-white animate-bounce'
+                    : isTimerRunning
+                    ? 'bg-amber-400 hover:bg-amber-300 text-stone-900'
+                    : 'bg-[#2a9d8f] hover:bg-[#21867a] text-white'
+                }`}
+                title={
+                  !hasGameStarted
+                    ? `Iniciar partida de ${selectedDurationMinutes} minutos`
+                    : isTimerRunning
+                    ? 'Pausar Tiempo'
+                    : 'Reanudar Tiempo'
+                }
               >
-                <RotateCcw className="w-4 h-4" />
+                {!hasGameStarted ? (
+                  <>
+                    <Play className="w-3 h-3 fill-current text-white" />
+                    <span>PLAY</span>
+                  </>
+                ) : isTimerRunning ? (
+                  <>
+                    <Pause className="w-3 h-3" />
+                    <span>Pausa</span>
+                  </>
+                ) : (
+                  <>
+                    <Play className="w-3 h-3 fill-current" />
+                    <span>Play</span>
+                  </>
+                )}
               </button>
-            )}
-          </div>
-        </div>
 
-        {/* Right: Live Running Score Counters */}
-        <div className="flex items-center gap-2">
-          <div className="bg-white px-3.5 py-1.5 border-2 border-[#2d2a26] shadow-bento-sm text-center">
-            <span className="text-[10px] font-bold text-stone-500 uppercase tracking-wider block">Puntaje</span>
-            <span className="text-base font-mono font-black text-[#1d3557]">{totalScoreEarned} pts</span>
-          </div>
-
-          <div className="bg-emerald-50 px-3 py-1.5 border-2 border-[#2d2a26] shadow-bento-sm text-center">
-            <span className="text-[10px] font-bold text-emerald-700 uppercase tracking-wider block">Aciertos</span>
-            <span className="text-base font-mono font-black text-emerald-700 flex items-center justify-center gap-1">
-              <CheckCircle2 className="w-3.5 h-3.5" /> {totalCorrect}
-            </span>
+              {hasGameStarted && (
+                <button
+                  onClick={handleResetGame}
+                  className="p-1 bg-[#f3efe6] hover:bg-[#2d2a26] hover:text-white text-[#2d2a26] border border-[#2d2a26] shadow-bento-sm transition-colors"
+                  title="Reiniciar y volver a configuración de inicio"
+                >
+                  <RotateCcw className="w-3 h-3" />
+                </button>
+              )}
+            </div>
           </div>
 
-          <div className="bg-rose-50 px-3 py-1.5 border-2 border-[#2d2a26] shadow-bento-sm text-center">
-            <span className="text-[10px] font-bold text-rose-700 uppercase tracking-wider block">Errores</span>
-            <span className="text-base font-mono font-black text-rose-700 flex items-center justify-center gap-1">
-              <XCircle className="w-3.5 h-3.5" /> {totalIncorrect}
-            </span>
-          </div>
+          {/* Right: Live Running Score Counters */}
+          <div className="flex items-center gap-1.5">
+            <div className="bg-white px-2 py-0.5 border border-[#2d2a26] shadow-bento-sm text-center">
+              <span className="text-[8px] font-bold text-stone-500 uppercase tracking-wider block">Pts</span>
+              <span className="text-xs font-mono font-black text-[#1d3557]">{totalScoreEarned}</span>
+            </div>
 
-          <button
-            onClick={() => {
-              sound.playClick();
-              setIsGameOver(true);
-            }}
-            className="px-3 py-2 bg-[#1d3557] hover:bg-[#d62828] text-white text-xs font-black uppercase tracking-wider border-2 border-[#2d2a26] shadow-bento-sm flex items-center gap-1 transition-colors"
-            title="Ver resumen y balance general de la partida"
-          >
-            <Trophy className="w-4 h-4 text-amber-300" />
-            <span className="hidden sm:inline">Puntaje Final</span>
-          </button>
+            <div className="bg-emerald-50 px-2 py-0.5 border border-[#2d2a26] shadow-bento-sm text-center">
+              <span className="text-[8px] font-bold text-emerald-700 uppercase tracking-wider block">Correctas</span>
+              <span className="text-xs font-mono font-black text-emerald-700 flex items-center justify-center gap-0.5">
+                <CheckCircle2 className="w-2.5 h-2.5" /> {totalCorrect}
+              </span>
+            </div>
+
+            <div className="bg-rose-50 px-2 py-0.5 border border-[#2d2a26] shadow-bento-sm text-center">
+              <span className="text-[8px] font-bold text-rose-700 uppercase tracking-wider block">Errores</span>
+              <span className="text-xs font-mono font-black text-rose-700 flex items-center justify-center gap-0.5">
+                <XCircle className="w-2.5 h-2.5" /> {totalIncorrect}
+              </span>
+            </div>
+
+            <button
+              onClick={() => {
+                sound.playClick();
+                setIsGameOver(true);
+              }}
+              className="px-2 py-1 bg-[#1d3557] hover:bg-[#d62828] text-white text-[10px] font-black uppercase tracking-wider border border-[#2d2a26] shadow-bento-sm flex items-center gap-1 transition-colors"
+              title="Ver resumen y balance general de la partida"
+            >
+              <Trophy className="w-3 h-3 text-amber-300" />
+              <span className="hidden sm:inline">Final</span>
+            </button>
+          </div>
         </div>
       </div>
 
@@ -770,110 +759,92 @@ export const GameModeMixto: React.FC<GameModeMixtoProps> = ({
           </div>
         </div>
       ) : (
-        /* PRESENTACIÓN DE PREGUNTA ACTIVA */
-        <div className="space-y-6">
+        /* PRESENTACIÓN DE PREGUNTA ACTIVA - COMPACTO PARA PANTALLA COMPLETA */
+        <div className="space-y-2.5">
           {/* NOTICE BEFORE STARTING GAME: FORMAT CHOSEN & PLAY PROMPT */}
           {!hasGameStarted && (
-            <div className="bg-amber-100 border-2 border-amber-700 p-4 shadow-bento flex flex-col md:flex-row md:items-center justify-between gap-4 animate-fade-in">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-amber-400 border-2 border-[#2d2a26] flex items-center justify-center shrink-0 shadow-bento-sm">
-                  <Timer className="w-5 h-5 text-[#2d2a26]" />
+            <div className="bg-amber-100 border border-amber-700 p-2 shadow-bento flex flex-col sm:flex-row sm:items-center justify-between gap-2 animate-fade-in text-xs">
+              <div className="flex items-center gap-2">
+                <div className="w-6 h-6 rounded-full bg-amber-400 border border-[#2d2a26] flex items-center justify-center shrink-0 shadow-bento-sm">
+                  <Timer className="w-3.5 h-3.5 text-[#2d2a26]" />
                 </div>
-                <div>
-                  <h4 className="font-serif font-black text-sm uppercase text-[#2d2a26]">
-                    Elegí el formato (3, 5 o 7 min) y dale PLAY para comenzar
-                  </h4>
-                  <p className="text-xs text-stone-700 font-medium">
-                    Tenés disponible <strong>3 min</strong>, <strong>5 min</strong> o <strong>7 min</strong>. Ninguno comenzará hasta presionar Play.
-                  </p>
+                <div className="text-[11px]">
+                  <strong className="text-[#2d2a26] uppercase">Elegí el formato (3, 5 o 7 min) y dale PLAY para comenzar.</strong>{' '}
+                  <span className="text-stone-700">El tiempo no corre hasta presionar Play.</span>
                 </div>
               </div>
 
               <button
                 onClick={() => handleStartGame(selectedDurationMinutes)}
-                className="w-full md:w-auto px-6 py-3 bg-[#2a9d8f] hover:bg-[#21867a] text-white font-black text-xs uppercase tracking-widest border-2 border-[#2d2a26] shadow-bento flex items-center justify-center gap-2 transition-all active:translate-y-0.5 shrink-0 animate-pulse"
+                className="w-full sm:w-auto px-4 py-1.5 bg-[#2a9d8f] hover:bg-[#21867a] text-white font-black text-[11px] uppercase tracking-wider border border-[#2d2a26] shadow-bento flex items-center justify-center gap-1.5 transition-all active:translate-y-0.5 shrink-0 animate-pulse"
               >
-                <Play className="w-4 h-4 fill-current text-white" />
-                <span>INICIAR PARTIDA ({selectedDurationMinutes} MIN)</span>
+                <Play className="w-3.5 h-3.5 fill-current text-white" />
+                <span>INICIAR ({selectedDurationMinutes} MIN)</span>
               </button>
             </div>
           )}
 
           {/* Card Progress & Nav Bar */}
-          <div className="bg-white border-2 border-[#2d2a26] p-4 shadow-bento flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div className="flex items-center gap-3">
-              <span className="bg-[#1d3557] text-white font-mono font-black text-sm px-3 py-1 border-2 border-[#2d2a26] shadow-bento-sm">
-                Pregunta {currentIndex + 1} / {deck.length}
+          <div className="bg-white border-2 border-[#2d2a26] px-3 py-1.5 shadow-bento flex flex-row items-center justify-between gap-2">
+            <div className="flex items-center gap-2">
+              <span className="bg-[#1d3557] text-white font-mono font-black text-xs px-2 py-0.5 border border-[#2d2a26] shadow-bento-sm">
+                #{currentIndex + 1}/{deck.length}
               </span>
-              <span className="text-xs font-extrabold text-[#2d2a26] uppercase tracking-wider">
+              <span className="text-[11px] font-extrabold text-[#2d2a26] uppercase tracking-wider">
                 {activeCard.categoryName}
               </span>
               {currentRecord && (
                 <span
-                  className={`text-[11px] font-black uppercase px-2 py-0.5 border border-[#2d2a26] flex items-center gap-1 ${
+                  className={`text-[10px] font-black uppercase px-1.5 py-0.2 border border-[#2d2a26] flex items-center gap-0.5 ${
                     currentRecord.isCorrect ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'
                   }`}
                 >
-                  {currentRecord.isCorrect ? <CheckCircle2 className="w-3.5 h-3.5" /> : <XCircle className="w-3.5 h-3.5" />}
-                  {currentRecord.isCorrect ? 'Respondida Correcta' : 'Respondida Incorrecta'}
+                  {currentRecord.isCorrect ? <CheckCircle2 className="w-3 h-3" /> : <XCircle className="w-3 h-3" />}
+                  {currentRecord.isCorrect ? 'Correcta' : 'Incorrecta'}
                 </span>
               )}
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1.5">
               <button
                 onClick={handlePrev}
                 disabled={currentIndex === 0}
-                className="px-3.5 py-2 bg-[#f3efe6] hover:bg-[#2d2a26] hover:text-white disabled:opacity-40 border-2 border-[#2d2a26] text-xs font-extrabold uppercase tracking-wider flex items-center gap-1.5 transition-colors"
+                className="px-2.5 py-1 bg-[#f3efe6] hover:bg-[#2d2a26] hover:text-white disabled:opacity-40 border border-[#2d2a26] text-[11px] font-extrabold uppercase tracking-wider flex items-center gap-1 transition-colors"
+                title="Volver a la pregunta anterior"
               >
-                <ArrowLeft className="w-4 h-4" />
-                Anterior
-              </button>
-
-              <button
-                onClick={handleNext}
-                className="px-4 py-2 bg-[#d62828] hover:bg-[#1d3557] text-white border-2 border-[#2d2a26] text-xs font-black uppercase tracking-wider flex items-center gap-1.5 shadow-bento-sm transition-colors"
-              >
-                {currentIndex === deck.length - 1 ? (
-                  <>
-                    Finalizar Partida <Trophy className="w-4 h-4 text-amber-300" />
-                  </>
-                ) : (
-                  <>
-                    Siguiente Pregunta <ArrowRight className="w-4 h-4" />
-                  </>
-                )}
+                <ArrowLeft className="w-3 h-3" />
+                <span className="hidden sm:inline">Anterior</span>
               </button>
             </div>
           </div>
 
           {/* Card Content Display Container */}
-          <div className="bg-white border-2 border-[#2d2a26] p-6 shadow-bento space-y-6">
+          <div className="bg-white border-2 border-[#2d2a26] p-3 sm:p-4 shadow-bento space-y-2.5">
             {/* Top Card Badge Header */}
-            <div className="flex flex-wrap items-center justify-between gap-3 border-b-2 border-[#2d2a26] pb-4">
-              <div className="flex items-center gap-2">
-                <span className="uppercase font-mono font-bold text-xs tracking-widest bg-[#e8e4d8] px-2.5 py-1 border border-[#2d2a26] flex items-center gap-1.5">
-                  {currentCategory === 'aproximacion' && <Dices className="w-4 h-4 text-[#1d3557]" />}
-                  {currentCategory === 'secuencia' && <Clock className="w-4 h-4 text-[#1d3557]" />}
-                  {currentCategory === 'verdaderofalso' && <CheckSquare className="w-4 h-4 text-[#2a9d8f]" />}
-                  {currentCategory === 'multiplechoice' && <HelpCircle className="w-4 h-4 text-[#9c6644]" />}
+            <div className="flex flex-wrap items-center justify-between gap-1.5 border-b border-[#2d2a26]/20 pb-1.5">
+              <div className="flex items-center gap-1.5">
+                <span className="uppercase font-mono font-bold text-[10px] tracking-wider bg-[#e8e4d8] px-2 py-0.5 border border-[#2d2a26] flex items-center gap-1">
+                  {currentCategory === 'aproximacion' && <Dices className="w-3 h-3 text-[#1d3557]" />}
+                  {currentCategory === 'secuencia' && <Clock className="w-3 h-3 text-[#1d3557]" />}
+                  {currentCategory === 'verdaderofalso' && <CheckSquare className="w-3 h-3 text-[#2a9d8f]" />}
+                  {currentCategory === 'multiplechoice' && <HelpCircle className="w-3 h-3 text-[#9c6644]" />}
                   Nº {activeCard.numberId} • {currentCategory.toUpperCase()}
                 </span>
-                <span className="bg-[#1d3557] text-white text-xs font-bold px-2.5 py-1 uppercase border border-[#2d2a26]">
+                <span className="bg-[#1d3557] text-white text-[10px] font-bold px-2 py-0.5 uppercase border border-[#2d2a26]">
                   Dificultad: {activeCard.difficulty} ({activeCard.points} Pts)
                 </span>
               </div>
 
               {activeCard.characteristics?.yearOrEpoch && currentCategory !== 'secuencia' && (
-                <span className="text-xs font-mono font-bold text-[#1d3557] bg-[#f3efe6] px-2.5 py-1 border border-[#2d2a26]">
+                <span className="text-[10px] font-mono font-bold text-[#1d3557] bg-[#f3efe6] px-2 py-0.5 border border-[#2d2a26]">
                   Época: {activeCard.characteristics.yearOrEpoch}
                 </span>
               )}
             </div>
 
             {/* Question Title & Image Banner */}
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
-              <div className="md:col-span-4 relative h-52 border-2 border-[#2d2a26] overflow-hidden bg-[#2d2a26] shadow-bento-sm">
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-2.5 items-stretch">
+              <div className="md:col-span-3 relative h-20 sm:h-24 md:h-28 border border-[#2d2a26] overflow-hidden bg-[#2d2a26] shadow-bento-sm">
                 <img
                   src={activeCard.imageUrl}
                   alt={activeCard.title}
@@ -881,26 +852,26 @@ export const GameModeMixto: React.FC<GameModeMixtoProps> = ({
                   className="w-full h-full object-cover opacity-90"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#2d2a26]/90 via-transparent to-transparent" />
-                <div className="absolute bottom-3 left-3 right-3 font-serif font-black text-lg text-white uppercase tracking-tight drop-shadow">
+                <div className="absolute bottom-1 left-1.5 right-1.5 font-serif font-black text-xs text-white uppercase tracking-tight drop-shadow leading-tight line-clamp-2">
                   {activeCard.title}
                 </div>
               </div>
 
-              <div className="md:col-span-8 space-y-4">
-                <div className="bg-[#f3efe6] p-5 border-2 border-[#2d2a26] shadow-bento-sm">
-                  <span className="text-[10px] font-bold uppercase tracking-widest text-[#1d3557] block mb-1">
+              <div className="md:col-span-9 flex flex-col justify-between gap-1.5">
+                <div className="bg-[#f3efe6] p-2.5 border border-[#2d2a26] shadow-bento-sm flex-1">
+                  <span className="text-[9px] font-bold uppercase tracking-widest text-[#1d3557] block mb-0.5">
                     Pregunta / Consigna:
                   </span>
-                  <p className="text-xl sm:text-2xl font-sans font-bold text-[#2d2a26] leading-snug">
+                  <p className="text-xs sm:text-sm font-sans font-bold text-[#2d2a26] leading-snug">
                     "{activeCard.question}"
                   </p>
                 </div>
 
                 {activeCard.unit && (
-                  <div className="inline-flex items-center gap-2 bg-white px-3 py-1.5 border-2 border-[#2d2a26] text-xs font-bold text-[#1d3557] shadow-bento-sm">
-                    <Sparkles className="w-4 h-4 text-amber-500" />
+                  <div className="inline-flex items-center gap-1.5 bg-white px-2 py-0.5 border border-[#2d2a26] text-[10px] font-bold text-[#1d3557] shadow-bento-sm self-start">
+                    <Sparkles className="w-3 h-3 text-amber-500" />
                     <span>Unidad de medida:</span>
-                    <span className="font-mono text-sm font-black uppercase text-[#d62828]">
+                    <span className="font-mono text-xs font-black uppercase text-[#d62828]">
                       {activeCard.unit}
                     </span>
                   </div>
@@ -909,18 +880,18 @@ export const GameModeMixto: React.FC<GameModeMixtoProps> = ({
             </div>
 
             {/* INTERACTIVE CATEGORY INPUT SECTION */}
-            <div className="pt-2">
+            <div className="pt-1">
               {/* 1. MULTIPLE CHOICE */}
               {currentCategory === 'multiplechoice' && options.length > 0 && (
-                <div className="space-y-3">
-                  <div className="flex items-center gap-2 border-b-2 border-[#2d2a26] pb-2">
-                    <HelpCircle className="w-5 h-5 text-[#9c6644]" />
-                    <h3 className="font-serif font-black text-lg uppercase text-[#2d2a26]">
+                <div className="space-y-2">
+                  <div className="flex items-center gap-1.5 border-b border-[#2d2a26]/20 pb-1">
+                    <HelpCircle className="w-4 h-4 text-[#9c6644]" />
+                    <h3 className="font-serif font-black text-xs uppercase text-[#2d2a26]">
                       Selecciona una opción de respuesta:
                     </h3>
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                     {options.map((opt, idx) => {
                       const letter = String.fromCharCode(65 + idx);
                       const isChosen = selectedOption === idx;
@@ -938,10 +909,10 @@ export const GameModeMixto: React.FC<GameModeMixtoProps> = ({
                           key={idx}
                           disabled={!hasGameStarted || Boolean(currentRecord)}
                           onClick={() => handleSelectMultipleChoiceOption(idx)}
-                          className={`p-4 border-2 border-[#2d2a26] shadow-bento-sm flex items-center gap-3 text-left transition-all ${btnStyle}`}
+                          className={`p-2 sm:p-2.5 border border-[#2d2a26] shadow-bento-sm flex items-center gap-2 text-left transition-all ${btnStyle}`}
                         >
                           <span
-                            className={`w-8 h-8 font-mono font-black text-sm flex items-center justify-center border-2 border-[#2d2a26] shrink-0 ${
+                            className={`w-6 h-6 font-mono font-black text-xs flex items-center justify-center border border-[#2d2a26] shrink-0 ${
                               showResult && isCorrect
                                 ? 'bg-emerald-600 text-white'
                                 : showResult && isChosen
@@ -951,31 +922,56 @@ export const GameModeMixto: React.FC<GameModeMixtoProps> = ({
                           >
                             {letter}
                           </span>
-                          <span className="font-bold text-sm leading-snug flex-1">{opt}</span>
-                          {showResult && isCorrect && <CheckCircle2 className="w-5 h-5 text-emerald-700 shrink-0" />}
-                          {showResult && isChosen && !isCorrect && <XCircle className="w-5 h-5 text-rose-700 shrink-0" />}
+                          <span className="font-bold text-xs leading-tight flex-1">{opt}</span>
+                          {showResult && isCorrect && <CheckCircle2 className="w-4 h-4 text-emerald-700 shrink-0" />}
+                          {showResult && isChosen && !isCorrect && <XCircle className="w-4 h-4 text-rose-700 shrink-0" />}
                         </button>
                       );
                     })}
                   </div>
+
+                  {currentRecord && (
+                    <div className="flex flex-wrap items-center justify-between gap-2 bg-[#f3efe6] p-2 border border-[#2d2a26] shadow-bento-sm">
+                      <div className="flex items-center gap-1.5 text-xs font-black uppercase">
+                        {currentRecord.isCorrect ? (
+                          <span className="text-emerald-700 flex items-center gap-1">
+                            <CheckCircle2 className="w-4 h-4" /> Comprobación: ¡Opción Correcta! (+{currentRecord.pointsEarned} pts)
+                          </span>
+                        ) : (
+                          <span className="text-rose-700 flex items-center gap-1">
+                            <XCircle className="w-4 h-4" /> Comprobación: Opción Incorrecta
+                          </span>
+                        )}
+                      </div>
+
+                      <button
+                        onClick={handleNext}
+                        className="px-4 py-1.5 bg-[#d62828] hover:bg-[#b71c1c] text-white font-black text-xs uppercase tracking-wider border border-[#2d2a26] shadow-bento flex items-center justify-center gap-1.5 transition-all animate-bounce"
+                        title="Avanzar a la siguiente pregunta"
+                      >
+                        <span>{currentIndex === deck.length - 1 ? 'Finalizar Partida' : 'Siguiente Pregunta'}</span>
+                        {currentIndex === deck.length - 1 ? <Trophy className="w-3.5 h-3.5 text-amber-300" /> : <ArrowRight className="w-3.5 h-3.5" />}
+                      </button>
+                    </div>
+                  )}
                 </div>
               )}
 
               {/* 2. VERDADERO O FALSO */}
               {currentCategory === 'verdaderofalso' && (
-                <div className="space-y-4 text-center">
-                  <div className="flex items-center justify-center gap-2 border-b-2 border-[#2d2a26] pb-2">
-                    <CheckSquare className="w-5 h-5 text-[#2a9d8f]" />
-                    <h3 className="font-serif font-black text-lg uppercase text-[#2d2a26]">
+                <div className="space-y-2 text-center">
+                  <div className="flex items-center justify-center gap-1.5 border-b border-[#2d2a26]/20 pb-1">
+                    <CheckSquare className="w-4 h-4 text-[#2a9d8f]" />
+                    <h3 className="font-serif font-black text-xs uppercase text-[#2d2a26]">
                       ¿Es la afirmación VERDADERA o FALSA?
                     </h3>
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-xl mx-auto">
+                  <div className="grid grid-cols-2 gap-2.5 max-w-sm mx-auto">
                     <button
                       disabled={!hasGameStarted || Boolean(currentRecord)}
                       onClick={() => handleSelectTF(true)}
-                      className={`p-5 border-2 border-[#2d2a26] font-serif font-black text-xl uppercase tracking-wider shadow-bento flex items-center justify-center gap-3 transition-all ${
+                      className={`p-2.5 sm:p-3 border-2 border-[#2d2a26] font-serif font-black text-xs sm:text-sm uppercase tracking-wider shadow-bento flex items-center justify-center gap-2 transition-all ${
                         currentRecord || showOfficialAnswer
                           ? activeCard.isTrue
                             ? 'bg-emerald-500 text-white'
@@ -987,14 +983,14 @@ export const GameModeMixto: React.FC<GameModeMixtoProps> = ({
                           : 'bg-[#2a9d8f] hover:bg-[#264653] text-white active:translate-y-0.5'
                       }`}
                     >
-                      <CheckCircle2 className="w-6 h-6" />
+                      <CheckCircle2 className="w-4 h-4" />
                       <span>Verdadero</span>
                     </button>
 
                     <button
                       disabled={!hasGameStarted || Boolean(currentRecord)}
                       onClick={() => handleSelectTF(false)}
-                      className={`p-5 border-2 border-[#2d2a26] font-serif font-black text-xl uppercase tracking-wider shadow-bento flex items-center justify-center gap-3 transition-all ${
+                      className={`p-2.5 sm:p-3 border-2 border-[#2d2a26] font-serif font-black text-xs sm:text-sm uppercase tracking-wider shadow-bento flex items-center justify-center gap-2 transition-all ${
                         currentRecord || showOfficialAnswer
                           ? !activeCard.isTrue
                             ? 'bg-emerald-500 text-white'
@@ -1006,66 +1002,104 @@ export const GameModeMixto: React.FC<GameModeMixtoProps> = ({
                           : 'bg-[#d62828] hover:bg-[#a51d1d] text-white active:translate-y-0.5'
                       }`}
                     >
-                      <XCircle className="w-6 h-6" />
+                      <XCircle className="w-4 h-4" />
                       <span>Falso</span>
                     </button>
                   </div>
+
+                  {currentRecord && (
+                    <div className="flex flex-wrap items-center justify-between gap-2 bg-[#f3efe6] p-2 border border-[#2d2a26] shadow-bento-sm">
+                      <div className="flex items-center gap-1.5 text-xs font-black uppercase">
+                        {currentRecord.isCorrect ? (
+                          <span className="text-emerald-700 flex items-center gap-1">
+                            <CheckCircle2 className="w-4 h-4" /> Comprobación: ¡Respuesta Correcta! (+{currentRecord.pointsEarned} pts)
+                          </span>
+                        ) : (
+                          <span className="text-rose-700 flex items-center gap-1">
+                            <XCircle className="w-4 h-4" /> Comprobación: Respuesta Incorrecta
+                          </span>
+                        )}
+                      </div>
+
+                      <button
+                        onClick={handleNext}
+                        className="px-4 py-1.5 bg-[#d62828] hover:bg-[#b71c1c] text-white font-black text-xs uppercase tracking-wider border border-[#2d2a26] shadow-bento flex items-center justify-center gap-1.5 transition-all animate-bounce"
+                        title="Avanzar a la siguiente pregunta"
+                      >
+                        <span>{currentIndex === deck.length - 1 ? 'Finalizar Partida' : 'Siguiente Pregunta'}</span>
+                        {currentIndex === deck.length - 1 ? <Trophy className="w-3.5 h-3.5 text-amber-300" /> : <ArrowRight className="w-3.5 h-3.5" />}
+                      </button>
+                    </div>
+                  )}
                 </div>
               )}
 
               {/* 3. APROXIMACIÓN NUMÉRICA (REGLA MENOR O IGUAL MÁS CERCANA) */}
               {currentCategory === 'aproximacion' && (
-                <div className="space-y-4">
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b-2 border-[#2d2a26] pb-2">
-                    <div className="flex items-center gap-2">
-                      <Dices className="w-5 h-5 text-[#1d3557]" />
-                      <h3 className="font-serif font-black text-lg uppercase text-[#2d2a26]">
+                <div className="space-y-2">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 border-b border-[#2d2a26]/20 pb-1">
+                    <div className="flex items-center gap-1.5">
+                      <Dices className="w-4 h-4 text-[#1d3557]" />
+                      <h3 className="font-serif font-black text-xs uppercase text-[#2d2a26]">
                         Estimación Numérica ({activeCard.unit || 'unidades'})
                       </h3>
                     </div>
 
-                    <div className="bg-amber-100 border border-amber-600 px-2.5 py-1 text-[11px] font-bold text-amber-900 flex items-center gap-1.5">
-                      <Info className="w-3.5 h-3.5 text-amber-800 shrink-0" />
+                    <div className="bg-amber-100 border border-amber-600 px-2 py-0.5 text-[10px] font-bold text-amber-900 flex items-center gap-1">
+                      <Info className="w-3 h-3 text-amber-800 shrink-0" />
                       <span>
-                        Regla: Ingresa un valor numérico aproximado o exacto. (Margen de tolerancia válido: ±{activeCard.toleranceMargin || Math.max(1, Math.round((activeCard.numericAnswer || 0) * 0.15))})
+                        Margen de tolerancia: ±{activeCard.toleranceMargin || Math.max(1, Math.round((activeCard.numericAnswer || 0) * 0.15))}
                       </span>
                     </div>
                   </div>
 
                   {/* Single Player Numeric Input Box */}
-                  <div className="bg-[#fdfaf5] p-5 border-2 border-[#2d2a26] shadow-bento-sm flex flex-col sm:flex-row items-center gap-4">
+                  <div className="bg-[#fdfaf5] p-2.5 border border-[#2d2a26] shadow-bento-sm flex flex-col sm:flex-row items-center gap-2">
                     <div className="relative flex-1 w-full">
                       <input
                         type="number"
                         disabled={!hasGameStarted || Boolean(currentRecord)}
-                        placeholder={!hasGameStarted ? 'Presiona Play para comenzar...' : `Ingresa tu valor en ${activeCard.unit || 'número'}...`}
+                        placeholder={!hasGameStarted ? 'Presiona Play para comenzar...' : `Ingresa valor en ${activeCard.unit || 'número'}...`}
                         value={userNumericInput}
                         onChange={(e) => setUserNumericInput(e.target.value)}
                         onKeyDown={(e) => {
                           if (e.key === 'Enter') handleEvaluateNumeric();
                         }}
-                        className="w-full bg-white border-2 border-[#2d2a26] px-4 py-3 text-lg font-mono font-bold text-[#2d2a26] focus:outline-none shadow-bento-sm disabled:bg-stone-100"
+                        className="w-full bg-white border border-[#2d2a26] px-3 py-1.5 text-xs sm:text-sm font-mono font-bold text-[#2d2a26] focus:outline-none shadow-bento-sm disabled:bg-stone-100"
                       />
                     </div>
 
-                    <button
-                      disabled={!hasGameStarted || Boolean(currentRecord) || !userNumericInput}
-                      onClick={handleEvaluateNumeric}
-                      className="w-full sm:w-auto px-6 py-3 bg-[#1d3557] hover:bg-[#2a9d8f] disabled:opacity-40 text-white font-extrabold text-xs uppercase tracking-widest border-2 border-[#2d2a26] shadow-bento transition-all"
-                    >
-                      Comprobar Estimación
-                    </button>
+                    <div className="flex flex-wrap items-center gap-1.5 w-full sm:w-auto">
+                      <button
+                        disabled={!hasGameStarted || Boolean(currentRecord) || !userNumericInput}
+                        onClick={handleEvaluateNumeric}
+                        className="w-full sm:w-auto px-4 py-2 bg-[#1d3557] hover:bg-[#2a9d8f] disabled:opacity-40 text-white font-extrabold text-[11px] uppercase tracking-wider border border-[#2d2a26] shadow-bento transition-all"
+                      >
+                        Comprobar Estimación
+                      </button>
+
+                      {currentRecord && (
+                        <button
+                          onClick={handleNext}
+                          className="w-full sm:w-auto px-4 py-2 bg-[#d62828] hover:bg-[#b71c1c] text-white font-black text-[11px] uppercase tracking-wider border border-[#2d2a26] shadow-bento flex items-center justify-center gap-1 transition-all animate-bounce"
+                          title="Avanzar a la siguiente pregunta"
+                        >
+                          <span>{currentIndex === deck.length - 1 ? 'Finalizar Partida' : 'Siguiente Pregunta'}</span>
+                          {currentIndex === deck.length - 1 ? <Trophy className="w-3.5 h-3.5 text-amber-300" /> : <ArrowRight className="w-3.5 h-3.5" />}
+                        </button>
+                      )}
+                    </div>
                   </div>
                 </div>
               )}
 
               {/* 4. SECUENCIAS CRONOLÓGICAS */}
               {currentCategory === 'secuencia' && sequenceItems.length > 0 && (
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between border-b-2 border-[#2d2a26] pb-2">
-                    <div className="flex items-center gap-2">
-                      <Clock className="w-5 h-5 text-[#1d3557]" />
-                      <h3 className="font-serif font-black text-lg uppercase text-[#2d2a26]">
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between border-b border-[#2d2a26]/20 pb-1">
+                    <div className="flex items-center gap-1.5">
+                      <Clock className="w-4 h-4 text-[#1d3557]" />
+                      <h3 className="font-serif font-black text-xs uppercase text-[#2d2a26]">
                         Ordena los hitos (de más antiguo a más reciente):
                       </h3>
                     </div>
@@ -1073,7 +1107,7 @@ export const GameModeMixto: React.FC<GameModeMixtoProps> = ({
                     {userSequenceOrder.length > 0 && !currentRecord && (
                       <button
                         onClick={() => setUserSequenceOrder([])}
-                        className="text-xs font-bold text-[#d62828] hover:underline uppercase"
+                        className="text-[10px] font-bold text-[#d62828] hover:underline uppercase"
                       >
                         Limpiar Orden
                       </button>
@@ -1081,7 +1115,7 @@ export const GameModeMixto: React.FC<GameModeMixtoProps> = ({
                   </div>
 
                   {/* Available Sequence Cards to Click in Order */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                     {sequenceItems.map((item) => {
                       const orderPosition = userSequenceOrder.indexOf(item.letter);
                       const isSelected = orderPosition !== -1;
@@ -1091,26 +1125,26 @@ export const GameModeMixto: React.FC<GameModeMixtoProps> = ({
                           key={item.id}
                           disabled={!hasGameStarted || Boolean(currentRecord)}
                           onClick={() => handleToggleSequenceLetter(item.letter)}
-                          className={`p-4 border-2 border-[#2d2a26] shadow-bento-sm flex items-start gap-3 text-left transition-all ${
+                          className={`p-2 border border-[#2d2a26] shadow-bento-sm flex items-start gap-2 text-left transition-all ${
                             isSelected
                               ? 'bg-amber-100 border-amber-600'
                               : 'bg-[#fdfaf5] hover:bg-white text-[#2d2a26]'
                           }`}
                         >
-                          <div className="flex flex-col items-center gap-1 shrink-0">
-                            <span className="w-7 h-7 bg-[#1d3557] text-white font-mono font-black text-sm flex items-center justify-center border border-[#2d2a26]">
+                          <div className="flex flex-col items-center gap-0.5 shrink-0">
+                            <span className="w-5 h-5 bg-[#1d3557] text-white font-mono font-black text-xs flex items-center justify-center border border-[#2d2a26]">
                               {item.letter}
                             </span>
                             {isSelected && (
-                              <span className="text-[10px] font-black bg-[#d62828] text-white px-1.5 py-0.2 rounded-full">
+                              <span className="text-[9px] font-black bg-[#d62828] text-white px-1 rounded-full">
                                 {orderPosition + 1}º
                               </span>
                             )}
                           </div>
                           <div>
-                            <p className="font-bold text-sm text-[#2d2a26]">{item.text}</p>
+                            <p className="font-bold text-xs text-[#2d2a26] leading-tight">{item.text}</p>
                             {item.detail && (
-                              <p className="text-xs text-stone-600 mt-0.5">{item.detail}</p>
+                              <p className="text-[10px] text-stone-600 mt-0.5">{item.detail}</p>
                             )}
                           </div>
                         </button>
@@ -1119,20 +1153,20 @@ export const GameModeMixto: React.FC<GameModeMixtoProps> = ({
                   </div>
 
                   {/* Selected Sequence Preview & Submit */}
-                  <div className="bg-[#f3efe6] p-4 border-2 border-[#2d2a26] flex flex-col sm:flex-row items-center justify-between gap-4">
-                    <div className="flex items-center gap-2">
-                      <span className="text-xs font-bold uppercase tracking-wider text-stone-600">
-                        Secuencia Elegida:
+                  <div className="bg-[#f3efe6] p-2 border border-[#2d2a26] flex flex-col sm:flex-row items-center justify-between gap-2 text-xs">
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-stone-600">
+                        Secuencia:
                       </span>
-                      <div className="flex items-center gap-1.5 font-mono font-black text-base text-[#1d3557]">
+                      <div className="flex items-center gap-1 font-mono font-black text-xs text-[#1d3557]">
                         {userSequenceOrder.length === 0 ? (
-                          <span className="text-xs font-normal italic text-stone-500">
-                            (Haz clic en las opciones en el orden cronológico)
+                          <span className="text-[10px] font-normal italic text-stone-500">
+                            (Clic en orden)
                           </span>
                         ) : (
                           userSequenceOrder.map((l, i) => (
                             <React.Fragment key={l}>
-                              <span className="bg-white px-2.5 py-0.5 border border-[#2d2a26]">{l}</span>
+                              <span className="bg-white px-1.5 py-0.5 border border-[#2d2a26]">{l}</span>
                               {i < userSequenceOrder.length - 1 && <span>➔</span>}
                             </React.Fragment>
                           ))
@@ -1140,45 +1174,58 @@ export const GameModeMixto: React.FC<GameModeMixtoProps> = ({
                       </div>
                     </div>
 
-                    <button
-                      disabled={!hasGameStarted || Boolean(currentRecord) || userSequenceOrder.length !== sequenceItems.length}
-                      onClick={handleEvaluateSequence}
-                      className="px-5 py-2.5 bg-[#1d3557] hover:bg-[#2a9d8f] disabled:opacity-40 text-white font-extrabold text-xs uppercase tracking-widest border-2 border-[#2d2a26] shadow-bento"
-                    >
-                      Comprobar Secuencia
-                    </button>
+                    <div className="flex flex-wrap items-center gap-1.5 w-full sm:w-auto">
+                      <button
+                        disabled={!hasGameStarted || Boolean(currentRecord) || userSequenceOrder.length !== sequenceItems.length}
+                        onClick={handleEvaluateSequence}
+                        className="w-full sm:w-auto px-3.5 py-1.5 bg-[#1d3557] hover:bg-[#2a9d8f] disabled:opacity-40 text-white font-extrabold text-[11px] uppercase tracking-wider border border-[#2d2a26] shadow-bento"
+                      >
+                        Comprobar Secuencia
+                      </button>
+
+                      {currentRecord && (
+                        <button
+                          onClick={handleNext}
+                          className="w-full sm:w-auto px-3.5 py-1.5 bg-[#d62828] hover:bg-[#b71c1c] text-white font-black text-[11px] uppercase tracking-wider border border-[#2d2a26] shadow-bento flex items-center justify-center gap-1 transition-all animate-bounce"
+                          title="Avanzar a la siguiente pregunta"
+                        >
+                          <span>{currentIndex === deck.length - 1 ? 'Finalizar Partida' : 'Siguiente Pregunta'}</span>
+                          {currentIndex === deck.length - 1 ? <Trophy className="w-3.5 h-3.5 text-amber-300" /> : <ArrowRight className="w-3.5 h-3.5" />}
+                        </button>
+                      )}
+                    </div>
                   </div>
                 </div>
               )}
             </div>
 
             {/* EVALUATION & REVEAL CONTROLS */}
-            <div className="pt-4 border-t-2 border-[#2d2a26] space-y-4">
-              <div className="bg-[#f3efe6] p-4 border-2 border-[#2d2a26] shadow-bento-sm flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                <div className="flex items-center gap-2">
-                  <span className="text-xs font-extrabold uppercase tracking-wider text-[#1d3557]">
+            <div className="pt-2 border-t border-[#2d2a26]/20 space-y-2">
+              <div className="bg-[#f3efe6] p-2 border border-[#2d2a26] shadow-bento-sm flex flex-col sm:flex-row sm:items-center justify-between gap-1.5">
+                <div className="flex items-center gap-1.5">
+                  <span className="text-[10px] font-extrabold uppercase tracking-wider text-[#1d3557]">
                     Evaluación Directa:
                   </span>
-                  <span className="text-xs font-medium text-stone-600">
-                    (Puedes registrar el resultado manualmente)
+                  <span className="text-[10px] text-stone-600">
+                    (Manual)
                   </span>
                 </div>
 
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-1.5">
                   <button
                     disabled={!hasGameStarted || Boolean(currentRecord)}
                     onClick={() => handleRecordAnswer(true, activeCard.points)}
-                    className="px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 disabled:opacity-40 text-white font-extrabold text-xs uppercase tracking-wider border border-[#2d2a26] shadow-bento-sm flex items-center gap-1"
+                    className="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 disabled:opacity-40 text-white font-extrabold text-[10px] uppercase tracking-wider border border-[#2d2a26] shadow-bento-sm flex items-center gap-1"
                   >
-                    <CheckCircle2 className="w-4 h-4" /> Correcta (+{activeCard.points} pts)
+                    <CheckCircle2 className="w-3 h-3" /> Correcta (+{activeCard.points} pts)
                   </button>
 
                   <button
                     disabled={!hasGameStarted || Boolean(currentRecord)}
                     onClick={() => handleRecordAnswer(false, 0)}
-                    className="px-3.5 py-1.5 bg-rose-600 hover:bg-rose-700 disabled:opacity-40 text-white font-extrabold text-xs uppercase tracking-wider border border-[#2d2a26] shadow-bento-sm flex items-center gap-1"
+                    className="px-2.5 py-1 bg-rose-600 hover:bg-rose-700 disabled:opacity-40 text-white font-extrabold text-[10px] uppercase tracking-wider border border-[#2d2a26] shadow-bento-sm flex items-center gap-1"
                   >
-                    <XCircle className="w-4 h-4" /> Incorrecta (0 pts)
+                    <XCircle className="w-3 h-3" /> Incorrecta (0 pts)
                   </button>
                 </div>
               </div>
@@ -1191,53 +1238,55 @@ export const GameModeMixto: React.FC<GameModeMixtoProps> = ({
                       sound.playClick();
                       setShowOfficialAnswer(!showOfficialAnswer);
                     }}
-                    className="px-4 py-2 bg-white hover:bg-[#f3efe6] border-2 border-[#2d2a26] text-xs font-bold uppercase tracking-wider flex items-center gap-2 shadow-bento-sm"
+                    className="px-3 py-1 bg-white hover:bg-[#f3efe6] border border-[#2d2a26] text-[11px] font-bold uppercase tracking-wider flex items-center gap-1.5 shadow-bento-sm"
                   >
-                    {showOfficialAnswer ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4 text-[#1d3557]" />}
-                    <span>{showOfficialAnswer ? 'Ocultar Explicación Histórica' : 'Ver Explicación Histórica y Detalles'}</span>
+                    {showOfficialAnswer ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5 text-[#1d3557]" />}
+                    <span>{showOfficialAnswer ? 'Ocultar Explicación' : 'Ver Explicación y Detalles'}</span>
                   </button>
                 ) : (
-                  <div className="flex items-center gap-2 text-xs font-bold text-stone-500 bg-[#f3efe6] px-3.5 py-2 border border-dashed border-[#2d2a26]/40">
-                    <EyeOff className="w-4 h-4 text-stone-400" />
+                  <div className="flex items-center gap-1.5 text-[10px] font-bold text-stone-500 bg-[#f3efe6] px-2.5 py-1 border border-dashed border-[#2d2a26]/40">
+                    <EyeOff className="w-3.5 h-3.5 text-stone-400" />
                     <span>Responde y comprueba la pregunta para ver la respuesta oficial y explicación.</span>
                   </div>
                 )}
 
                 {currentRecord && (
-                  <span className="text-xs font-black text-[#1d3557] uppercase tracking-wide">
-                    Registrado: {currentRecord.pointsEarned} Pts ganados
-                  </span>
+                  <div className="flex items-center gap-2">
+                    <span className="text-[11px] font-black text-[#1d3557] uppercase tracking-wide">
+                      Registrado: {currentRecord.pointsEarned} Pts
+                    </span>
+                  </div>
                 )}
               </div>
 
-              {/* Official Answer & Historical Explanation Box - ONLY shown after submitting/verifying and when toggled on */}
+              {/* Official Answer & Historical Explanation Box */}
               {Boolean(currentRecord && showOfficialAnswer) && (
-                <div className="bg-[#1d3557] text-white p-5 border-2 border-[#2d2a26] shadow-bento space-y-3 animate-fade-in">
-                  <div className="flex items-center justify-between border-b border-white/20 pb-2">
-                    <span className="text-[11px] font-mono font-bold uppercase tracking-widest text-amber-400 flex items-center gap-1.5">
-                      <Sparkles className="w-4 h-4 text-amber-400" />
+                <div className="bg-[#1d3557] text-white p-3 border-2 border-[#2d2a26] shadow-bento space-y-1.5 animate-fade-in text-xs">
+                  <div className="flex items-center justify-between border-b border-white/20 pb-1">
+                    <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-amber-400 flex items-center gap-1">
+                      <Sparkles className="w-3.5 h-3.5 text-amber-400" />
                       RESPUESTA Y EXPLICACIÓN HISTÓRICA OFICIAL
                     </span>
-                    <span className="text-xs font-mono font-black text-amber-300">
+                    <span className="text-[11px] font-mono font-black text-amber-300">
                       {activeCard.points} PUNTOS
                     </span>
                   </div>
 
-                  <div className="space-y-2">
-                    <div className="text-lg font-serif font-black text-white">
+                  <div className="space-y-1">
+                    <div className="text-xs sm:text-sm font-serif font-black text-white">
                       Respuesta:{' '}
-                      <span className="text-amber-300 underline underline-offset-4">
+                      <span className="text-amber-300 underline underline-offset-2">
                         {activeCard.answer}
                       </span>
                     </div>
 
-                    <p className="text-xs sm:text-sm text-stone-200 leading-relaxed font-sans">
+                    <p className="text-[11px] sm:text-xs text-stone-200 leading-relaxed font-sans">
                       {activeCard.explanation}
                     </p>
 
                     {activeCard.historicalContext && (
-                      <div className="bg-[#264653] p-3 border border-white/20 text-xs text-stone-300 italic font-serif mt-2">
-                        <strong>Contexto de la Campaña:</strong> {activeCard.historicalContext}
+                      <div className="bg-[#264653] p-1.5 border border-white/20 text-[10px] text-stone-300 italic font-serif mt-1">
+                        <strong>Contexto:</strong> {activeCard.historicalContext}
                       </div>
                     )}
                   </div>
