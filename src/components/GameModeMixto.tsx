@@ -57,11 +57,11 @@ export const GameModeMixto: React.FC<GameModeMixtoProps> = ({
   );
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  // Timer Configuration & State (Default 7 minutes = 420 seconds)
-  const [selectedDurationMinutes, setSelectedDurationMinutes] = useState<number>(7);
-  const [timeRemaining, setTimeRemaining] = useState<number>(7 * 60);
+  // Timer Configuration & State (Options: 3 min, 5 min, 7 min)
+  const [selectedDurationMinutes, setSelectedDurationMinutes] = useState<number>(3);
+  const [timeRemaining, setTimeRemaining] = useState<number>(3 * 60);
   const [isTimerRunning, setIsTimerRunning] = useState<boolean>(false);
-  const [isTimerEnabled, setIsTimerEnabled] = useState<boolean>(true);
+  const [hasGameStarted, setHasGameStarted] = useState<boolean>(false);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
   // Answering & Evaluation State
@@ -92,9 +92,9 @@ export const GameModeMixto: React.FC<GameModeMixtoProps> = ({
     }
   }, [currentIndex, activeCard?.id]);
 
-  // Timer Interval Effect
+  // Timer Interval Effect - only ticks when game has started and timer is running
   useEffect(() => {
-    if (isTimerRunning && isTimerEnabled && !isGameOver) {
+    if (isTimerRunning && hasGameStarted && !isGameOver) {
       timerRef.current = setInterval(() => {
         setTimeRemaining((prev) => {
           if (prev <= 1) {
@@ -117,7 +117,7 @@ export const GameModeMixto: React.FC<GameModeMixtoProps> = ({
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
     };
-  }, [isTimerRunning, isTimerEnabled, isGameOver]);
+  }, [isTimerRunning, hasGameStarted, isGameOver]);
 
   // Format MM:SS
   const formatTime = (seconds: number) => {
@@ -126,8 +126,22 @@ export const GameModeMixto: React.FC<GameModeMixtoProps> = ({
     return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   };
 
-  // Start / Reset Game
-  const handleStartNewGame = (durationMins: number = selectedDurationMinutes) => {
+  // Select format duration (3, 5, or 7 minutes) - does NOT start countdown if not yet playing
+  const handleSelectDuration = (durationMins: number) => {
+    sound.playClick();
+    setSelectedDurationMinutes(durationMins);
+    setTimeRemaining(durationMins * 60);
+    if (hasGameStarted) {
+      // If already playing and user clicks a duration, restart with that format
+      handleStartGame(durationMins);
+    } else {
+      // If not yet started, keep timer waiting until user presses Play
+      setIsTimerRunning(false);
+    }
+  };
+
+  // Start Game explicitly on Play button
+  const handleStartGame = (durationMins: number = selectedDurationMinutes) => {
     sound.playClick();
     const shuffled = [...cards].sort(() => Math.random() - 0.5);
     setDeck(shuffled);
@@ -137,7 +151,33 @@ export const GameModeMixto: React.FC<GameModeMixtoProps> = ({
     setIsGameOver(false);
     setSelectedDurationMinutes(durationMins);
     setTimeRemaining(durationMins * 60);
+    setHasGameStarted(true);
     setIsTimerRunning(true);
+    if (onUpdateScore) {
+      onUpdateScore(0);
+    }
+  };
+
+  // Toggle Play / Pause
+  const handleTogglePlayPause = () => {
+    sound.playClick();
+    if (!hasGameStarted) {
+      handleStartGame(selectedDurationMinutes);
+    } else {
+      setIsTimerRunning((prev) => !prev);
+    }
+  };
+
+  // Reset Game back to setup / waiting state
+  const handleResetGame = () => {
+    sound.playClick();
+    setHasGameStarted(false);
+    setIsTimerRunning(false);
+    setTimeRemaining(selectedDurationMinutes * 60);
+    setCurrentIndex(0);
+    setAnswersHistory({});
+    setShowOfficialAnswer(false);
+    setIsGameOver(false);
     if (onUpdateScore) {
       onUpdateScore(0);
     }
@@ -149,7 +189,7 @@ export const GameModeMixto: React.FC<GameModeMixtoProps> = ({
     customPoints?: number,
     userSelectionDesc?: string
   ) => {
-    if (!activeCard) return;
+    if (!hasGameStarted || !activeCard) return;
 
     const points = customPoints !== undefined ? customPoints : (isCorrect ? activeCard.points : 0);
 
@@ -190,7 +230,7 @@ export const GameModeMixto: React.FC<GameModeMixtoProps> = ({
 
   // Evaluate Multiple Choice click
   const handleSelectMultipleChoiceOption = (optIndex: number) => {
-    if (currentRecord) return; // already answered
+    if (!hasGameStarted || currentRecord) return; // already answered or not started
     setSelectedOption(optIndex);
     const isCorrect = optIndex === activeCard.correctOptionIndex;
     const optLetter = String.fromCharCode(65 + optIndex);
@@ -200,7 +240,7 @@ export const GameModeMixto: React.FC<GameModeMixtoProps> = ({
 
   // Evaluate Verdadero / Falso click
   const handleSelectTF = (val: boolean) => {
-    if (currentRecord) return;
+    if (!hasGameStarted || currentRecord) return;
     setSelectedTF(val);
     const isCorrect = val === activeCard.isTrue;
     handleRecordAnswer(isCorrect, isCorrect ? activeCard.points : 0, val ? 'Verdadero' : 'Falso');
@@ -210,7 +250,7 @@ export const GameModeMixto: React.FC<GameModeMixtoProps> = ({
    * Evaluate Numerical Estimation (Regla de Las Vegas / Estimación menor o igual más cercana sin pasarse)
    */
   const handleEvaluateNumeric = () => {
-    if (currentRecord || !userNumericInput) return;
+    if (!hasGameStarted || currentRecord || !userNumericInput) return;
     const num = parseFloat(userNumericInput);
     if (isNaN(num)) return;
 
@@ -255,7 +295,7 @@ export const GameModeMixto: React.FC<GameModeMixtoProps> = ({
 
   // Sequence Item Click
   const handleToggleSequenceLetter = (letter: string) => {
-    if (currentRecord) return;
+    if (!hasGameStarted || currentRecord) return;
     if (userSequenceOrder.includes(letter)) {
       setUserSequenceOrder((prev) => prev.filter((l) => l !== letter));
     } else {
@@ -265,7 +305,7 @@ export const GameModeMixto: React.FC<GameModeMixtoProps> = ({
 
   // Evaluate Sequence
   const handleEvaluateSequence = () => {
-    if (currentRecord || !activeCard.correctSequenceOrder) return;
+    if (!hasGameStarted || currentRecord || !activeCard.correctSequenceOrder) return;
     const isCorrect = JSON.stringify(userSequenceOrder) === JSON.stringify(activeCard.correctSequenceOrder);
     const orderStr = userSequenceOrder.join(' ➔ ');
     handleRecordAnswer(isCorrect, isCorrect ? activeCard.points : 0, `Secuencia: ${orderStr}`);
@@ -312,105 +352,166 @@ export const GameModeMixto: React.FC<GameModeMixtoProps> = ({
   return (
     <div className="space-y-6 text-[#2d2a26]">
       {/* TOP CONTROL BAR: TIME SELECTOR, TIMER & RUNNING SCORE */}
-      <div className="bg-[#f3efe6] border-2 border-[#2d2a26] p-4 shadow-bento flex flex-col md:flex-row md:items-center justify-between gap-4">
-        {/* Left: Mode Title & Duration Selector */}
-        <div className="flex flex-wrap items-center gap-3">
-          <span className="bg-[#d62828] text-white font-sans font-black text-xs uppercase tracking-widest px-3 py-1.5 border-2 border-[#2d2a26] flex items-center gap-1.5 shadow-bento-sm">
-            <Shuffle className="w-4 h-4 text-amber-300" />
-            MODO MIXTO
-          </span>
+      <div className="bg-[#f3efe6] border-2 border-[#2d2a26] p-4 shadow-bento flex flex-col xl:flex-row xl:items-center justify-between gap-4">
+        {/* Left: Mode Title & Duration Selector with Clear Indication */}
+        <div className="flex flex-col gap-2">
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="bg-[#d62828] text-white font-sans font-black text-xs uppercase tracking-widest px-3 py-1.5 border-2 border-[#2d2a26] flex items-center gap-1.5 shadow-bento-sm">
+              <Shuffle className="w-4 h-4 text-amber-300" />
+              MODO MIXTO
+            </span>
 
-          {/* Time Selector Dropdown / Pills */}
-          <div className="flex items-center gap-1 bg-white p-1 border-2 border-[#2d2a26] shadow-bento-sm text-xs font-bold">
-            <Timer className="w-4 h-4 text-[#1d3557] ml-1" />
-            <button
-              onClick={() => handleStartNewGame(7)}
-              className={`px-2.5 py-1 uppercase text-[11px] font-black transition-colors ${
-                selectedDurationMinutes === 7 && isTimerEnabled
-                  ? 'bg-[#1d3557] text-white'
-                  : 'text-[#2d2a26] hover:bg-[#f3efe6]'
-              }`}
-              title="Partida estándar de 7 minutos"
-            >
-              7 Min
-            </button>
-            <button
-              onClick={() => handleStartNewGame(5)}
-              className={`px-2.5 py-1 uppercase text-[11px] font-black transition-colors ${
-                selectedDurationMinutes === 5 && isTimerEnabled
-                  ? 'bg-[#1d3557] text-white'
-                  : 'text-[#2d2a26] hover:bg-[#f3efe6]'
-              }`}
-              title="Partida de 5 minutos"
-            >
-              5 Min
-            </button>
-            <button
-              onClick={() => handleStartNewGame(3)}
-              className={`px-2.5 py-1 uppercase text-[11px] font-black transition-colors ${
-                selectedDurationMinutes === 3 && isTimerEnabled
-                  ? 'bg-[#1d3557] text-white'
-                  : 'text-[#2d2a26] hover:bg-[#f3efe6]'
-              }`}
-              title="Partida rápida de 3 minutos"
-            >
-              3 Min
-            </button>
-            <button
-              onClick={() => {
-                setIsTimerEnabled(!isTimerEnabled);
-                setIsTimerRunning(false);
-              }}
-              className={`px-2 py-1 uppercase text-[10px] font-bold border-l border-[#2d2a26]/30 ${
-                !isTimerEnabled ? 'bg-stone-700 text-white' : 'text-stone-600 hover:bg-[#f3efe6]'
-              }`}
-              title="Jugar sin límite de tiempo"
-            >
-              {!isTimerEnabled ? 'Sin Tiempo' : 'Libre'}
-            </button>
+            {/* Clear indication that the player can choose the minutes */}
+            <div className="flex items-center gap-1.5 text-xs font-black uppercase text-[#1d3557] bg-white px-3 py-1 border-2 border-[#2d2a26] shadow-bento-sm">
+              <Timer className="w-4 h-4 text-[#d62828]" />
+              <span>Elegí la cantidad de minutos para jugar:</span>
+            </div>
+          </div>
+
+          {/* Time Selector: 3 Min first, 5 Min second, 7 Min third. NO MODO LIBRE! */}
+          <div className="flex flex-wrap items-center gap-2">
+            <div className="flex items-center gap-1 bg-white p-1 border-2 border-[#2d2a26] shadow-bento-sm text-xs font-bold">
+              {/* 3 Min (Primero) */}
+              <button
+                onClick={() => handleSelectDuration(3)}
+                className={`px-3 py-1.5 uppercase text-xs font-black transition-all flex items-center gap-1 ${
+                  selectedDurationMinutes === 3
+                    ? 'bg-[#1d3557] text-white shadow-sm'
+                    : 'text-[#2d2a26] hover:bg-[#f3efe6]'
+                }`}
+                title="Elegir partida de 3 minutos"
+              >
+                <span>3 Min</span>
+                {selectedDurationMinutes === 3 && <CheckCircle2 className="w-3.5 h-3.5 text-amber-300" />}
+              </button>
+
+              {/* 5 Min (Segundo) */}
+              <button
+                onClick={() => handleSelectDuration(5)}
+                className={`px-3 py-1.5 uppercase text-xs font-black transition-all flex items-center gap-1 ${
+                  selectedDurationMinutes === 5
+                    ? 'bg-[#1d3557] text-white shadow-sm'
+                    : 'text-[#2d2a26] hover:bg-[#f3efe6]'
+                }`}
+                title="Elegir partida de 5 minutos"
+              >
+                <span>5 Min</span>
+                {selectedDurationMinutes === 5 && <CheckCircle2 className="w-3.5 h-3.5 text-amber-300" />}
+              </button>
+
+              {/* 7 Min (Por último) */}
+              <button
+                onClick={() => handleSelectDuration(7)}
+                className={`px-3 py-1.5 uppercase text-xs font-black transition-all flex items-center gap-1 ${
+                  selectedDurationMinutes === 7
+                    ? 'bg-[#1d3557] text-white shadow-sm'
+                    : 'text-[#2d2a26] hover:bg-[#f3efe6]'
+                }`}
+                title="Elegir partida de 7 minutos"
+              >
+                <span>7 Min</span>
+                {selectedDurationMinutes === 7 && <CheckCircle2 className="w-3.5 h-3.5 text-amber-300" />}
+              </button>
+            </div>
+
+            {!hasGameStarted ? (
+              <span className="text-[11px] font-black uppercase text-amber-900 bg-amber-200/90 px-2.5 py-1 border border-amber-600 shadow-bento-sm flex items-center gap-1">
+                <Play className="w-3.5 h-3.5 fill-current text-amber-800" />
+                Ninguno comenzará hasta presionar PLAY
+              </span>
+            ) : isTimerRunning ? (
+              <span className="text-[11px] font-black uppercase text-emerald-800 bg-emerald-100 px-2.5 py-1 border border-emerald-600 shadow-bento-sm flex items-center gap-1">
+                <Clock className="w-3.5 h-3.5 text-emerald-700" />
+                Partida en curso ({selectedDurationMinutes} min)
+              </span>
+            ) : (
+              <span className="text-[11px] font-black uppercase text-amber-900 bg-amber-100 px-2.5 py-1 border border-amber-600 shadow-bento-sm flex items-center gap-1">
+                <Pause className="w-3.5 h-3.5 text-amber-800" />
+                Partida pausada
+              </span>
+            )}
           </div>
         </div>
 
         {/* Center: Live Timer Box */}
-        {isTimerEnabled && (
-          <div
-            className={`flex items-center gap-3 px-4 py-2 border-2 border-[#2d2a26] shadow-bento-sm transition-all ${
-              timeRemaining < 120
-                ? 'bg-red-500 text-white animate-pulse'
-                : 'bg-white text-[#2d2a26]'
-            }`}
-          >
+        <div
+          className={`flex items-center gap-3 px-4 py-2 border-2 border-[#2d2a26] shadow-bento-sm transition-all ${
+            !hasGameStarted
+              ? 'bg-amber-100 border-amber-700 text-[#2d2a26]'
+              : isTimerRunning && timeRemaining < 60
+              ? 'bg-red-500 text-white animate-pulse'
+              : !isTimerRunning
+              ? 'bg-amber-50 text-[#2d2a26]'
+              : 'bg-white text-[#2d2a26]'
+          }`}
+        >
+          <div className="flex flex-col">
             <div className="flex items-center gap-1.5 font-mono text-2xl sm:text-3xl font-black tracking-tight">
-              <Clock className={`w-6 h-6 ${timeRemaining < 120 ? 'text-white' : 'text-[#d62828]'}`} />
+              <Clock
+                className={`w-6 h-6 ${
+                  timeRemaining < 60 && hasGameStarted && isTimerRunning
+                    ? 'text-white'
+                    : 'text-[#d62828]'
+                }`}
+              />
               <span>{formatTime(timeRemaining)}</span>
             </div>
+            <span className="text-[10px] font-black uppercase tracking-wider text-stone-600">
+              {!hasGameStarted
+                ? `Formato: ${selectedDurationMinutes} min (en espera)`
+                : isTimerRunning
+                ? 'Tiempo restante'
+                : 'En pausa'}
+            </span>
+          </div>
 
-            <div className="flex items-center gap-1">
-              <button
-                onClick={() => {
-                  sound.playClick();
-                  setIsTimerRunning(!isTimerRunning);
-                }}
-                className={`p-1.5 border-2 border-[#2d2a26] text-xs font-black uppercase ${
-                  isTimerRunning
-                    ? 'bg-amber-400 text-stone-900 hover:bg-amber-300'
-                    : 'bg-[#2a9d8f] text-white hover:bg-[#264653]'
-                }`}
-                title={isTimerRunning ? 'Pausar Tiempo' : 'Reanudar Tiempo'}
-              >
-                {isTimerRunning ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
-              </button>
+          <div className="flex items-center gap-1.5">
+            <button
+              onClick={handleTogglePlayPause}
+              className={`px-3 py-2 border-2 border-[#2d2a26] text-xs font-black uppercase flex items-center gap-1.5 shadow-bento-sm transition-all active:translate-y-0.5 ${
+                !hasGameStarted
+                  ? 'bg-[#2a9d8f] hover:bg-[#21867a] text-white animate-bounce'
+                  : isTimerRunning
+                  ? 'bg-amber-400 hover:bg-amber-300 text-stone-900'
+                  : 'bg-[#2a9d8f] hover:bg-[#21867a] text-white'
+              }`}
+              title={
+                !hasGameStarted
+                  ? `Iniciar partida de ${selectedDurationMinutes} minutos`
+                  : isTimerRunning
+                  ? 'Pausar Tiempo'
+                  : 'Reanudar Tiempo'
+              }
+            >
+              {!hasGameStarted ? (
+                <>
+                  <Play className="w-4 h-4 fill-current text-white" />
+                  <span>PLAY</span>
+                </>
+              ) : isTimerRunning ? (
+                <>
+                  <Pause className="w-4 h-4" />
+                  <span className="hidden sm:inline">Pausar</span>
+                </>
+              ) : (
+                <>
+                  <Play className="w-4 h-4 fill-current" />
+                  <span className="hidden sm:inline">Reanudar</span>
+                </>
+              )}
+            </button>
 
+            {hasGameStarted && (
               <button
-                onClick={() => handleStartNewGame(selectedDurationMinutes)}
-                className="p-1.5 bg-[#f3efe6] hover:bg-[#2d2a26] hover:text-white text-[#2d2a26] border-2 border-[#2d2a26]"
-                title="Reiniciar Partida"
+                onClick={handleResetGame}
+                className="p-2 bg-[#f3efe6] hover:bg-[#2d2a26] hover:text-white text-[#2d2a26] border-2 border-[#2d2a26] shadow-bento-sm transition-colors"
+                title="Reiniciar y volver a configuración de inicio"
               >
                 <RotateCcw className="w-4 h-4" />
               </button>
-            </div>
+            )}
           </div>
-        )}
+        </div>
 
         {/* Right: Live Running Score Counters */}
         <div className="flex items-center gap-2">
@@ -512,16 +613,16 @@ export const GameModeMixto: React.FC<GameModeMixtoProps> = ({
                 <Clock className="w-4 h-4" /> Tiempo Empleado
               </span>
               <div className="text-4xl sm:text-5xl font-mono font-black text-[#1d3557]">
-                {formatTime(isTimerEnabled ? timeSpentSeconds : 0)}
+                {formatTime(timeSpentSeconds)}
               </div>
               <span className="text-[11px] font-bold text-stone-500 block">
-                {isTimerEnabled ? `Límite: ${selectedDurationMinutes} min` : 'Modo Libre'}
+                Límite: {selectedDurationMinutes} min
               </span>
             </div>
           </div>
 
           {/* Military Rank Honor Banner */}
-          <div className="bg-white border-2 border-[#2d2a26] p-6 shadow-bento flex flex-col sm:flex-row items-center justify-between gap-6">
+          <div className="bg-white border-2 border-[#2d2a26] p-6 shadow-bento flex flex-col lg:flex-row items-center justify-between gap-6">
             <div className="flex items-center gap-4 text-left">
               <div className={`w-16 h-16 rounded-full flex items-center justify-center text-3xl border-2 shadow-bento-sm ${rank.color}`}>
                 <Medal className="w-8 h-8" />
@@ -539,13 +640,35 @@ export const GameModeMixto: React.FC<GameModeMixtoProps> = ({
               </div>
             </div>
 
-            <div className="flex items-center gap-3">
+            <div className="flex flex-wrap items-center gap-2.5">
+              <span className="text-xs font-black uppercase text-stone-600 block sm:inline">
+                Jugar de Nuevo:
+              </span>
               <button
-                onClick={() => handleStartNewGame(7)}
-                className="px-6 py-3 bg-[#d62828] hover:bg-[#1d3557] text-white font-extrabold text-xs uppercase tracking-widest border-2 border-[#2d2a26] shadow-bento flex items-center gap-2 transition-all active:translate-y-0.5"
+                onClick={() => handleStartGame(3)}
+                className="px-4 py-2.5 bg-[#d62828] hover:bg-[#1d3557] text-white font-extrabold text-xs uppercase tracking-wider border-2 border-[#2d2a26] shadow-bento flex items-center gap-1.5 transition-all active:translate-y-0.5"
+                title="Partida de 3 minutos"
               >
-                <Shuffle className="w-4 h-4 text-amber-300" />
-                Jugar de Nuevo (7 Min)
+                <Play className="w-3.5 h-3.5 fill-current text-amber-300" />
+                3 Min
+              </button>
+
+              <button
+                onClick={() => handleStartGame(5)}
+                className="px-4 py-2.5 bg-[#d62828] hover:bg-[#1d3557] text-white font-extrabold text-xs uppercase tracking-wider border-2 border-[#2d2a26] shadow-bento flex items-center gap-1.5 transition-all active:translate-y-0.5"
+                title="Partida de 5 minutos"
+              >
+                <Play className="w-3.5 h-3.5 fill-current text-amber-300" />
+                5 Min
+              </button>
+
+              <button
+                onClick={() => handleStartGame(7)}
+                className="px-4 py-2.5 bg-[#d62828] hover:bg-[#1d3557] text-white font-extrabold text-xs uppercase tracking-wider border-2 border-[#2d2a26] shadow-bento flex items-center gap-1.5 transition-all active:translate-y-0.5"
+                title="Partida de 7 minutos"
+              >
+                <Play className="w-3.5 h-3.5 fill-current text-amber-300" />
+                7 Min
               </button>
 
               <button
@@ -553,9 +676,9 @@ export const GameModeMixto: React.FC<GameModeMixtoProps> = ({
                   sound.playClick();
                   setIsGameOver(false);
                 }}
-                className="px-4 py-3 bg-white hover:bg-[#e8e4d8] text-[#2d2a26] font-bold text-xs uppercase tracking-wider border-2 border-[#2d2a26] shadow-bento-sm"
+                className="px-4 py-2.5 bg-white hover:bg-[#e8e4d8] text-[#2d2a26] font-bold text-xs uppercase tracking-wider border-2 border-[#2d2a26] shadow-bento-sm"
               >
-                Volver a la Pregunta
+                Ver Preguntas
               </button>
             </div>
           </div>
@@ -649,6 +772,33 @@ export const GameModeMixto: React.FC<GameModeMixtoProps> = ({
       ) : (
         /* PRESENTACIÓN DE PREGUNTA ACTIVA */
         <div className="space-y-6">
+          {/* NOTICE BEFORE STARTING GAME: FORMAT CHOSEN & PLAY PROMPT */}
+          {!hasGameStarted && (
+            <div className="bg-amber-100 border-2 border-amber-700 p-4 shadow-bento flex flex-col md:flex-row md:items-center justify-between gap-4 animate-fade-in">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-amber-400 border-2 border-[#2d2a26] flex items-center justify-center shrink-0 shadow-bento-sm">
+                  <Timer className="w-5 h-5 text-[#2d2a26]" />
+                </div>
+                <div>
+                  <h4 className="font-serif font-black text-sm uppercase text-[#2d2a26]">
+                    Elegí el formato (3, 5 o 7 min) y dale PLAY para comenzar
+                  </h4>
+                  <p className="text-xs text-stone-700 font-medium">
+                    Tenés disponible <strong>3 min</strong>, <strong>5 min</strong> o <strong>7 min</strong>. Ninguno comenzará hasta presionar Play.
+                  </p>
+                </div>
+              </div>
+
+              <button
+                onClick={() => handleStartGame(selectedDurationMinutes)}
+                className="w-full md:w-auto px-6 py-3 bg-[#2a9d8f] hover:bg-[#21867a] text-white font-black text-xs uppercase tracking-widest border-2 border-[#2d2a26] shadow-bento flex items-center justify-center gap-2 transition-all active:translate-y-0.5 shrink-0 animate-pulse"
+              >
+                <Play className="w-4 h-4 fill-current text-white" />
+                <span>INICIAR PARTIDA ({selectedDurationMinutes} MIN)</span>
+              </button>
+            </div>
+          )}
+
           {/* Card Progress & Nav Bar */}
           <div className="bg-white border-2 border-[#2d2a26] p-4 shadow-bento flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-3">
@@ -786,7 +936,7 @@ export const GameModeMixto: React.FC<GameModeMixtoProps> = ({
                       return (
                         <button
                           key={idx}
-                          disabled={Boolean(currentRecord)}
+                          disabled={!hasGameStarted || Boolean(currentRecord)}
                           onClick={() => handleSelectMultipleChoiceOption(idx)}
                           className={`p-4 border-2 border-[#2d2a26] shadow-bento-sm flex items-center gap-3 text-left transition-all ${btnStyle}`}
                         >
@@ -823,7 +973,7 @@ export const GameModeMixto: React.FC<GameModeMixtoProps> = ({
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-xl mx-auto">
                     <button
-                      disabled={Boolean(currentRecord)}
+                      disabled={!hasGameStarted || Boolean(currentRecord)}
                       onClick={() => handleSelectTF(true)}
                       className={`p-5 border-2 border-[#2d2a26] font-serif font-black text-xl uppercase tracking-wider shadow-bento flex items-center justify-center gap-3 transition-all ${
                         currentRecord || showOfficialAnswer
@@ -832,6 +982,8 @@ export const GameModeMixto: React.FC<GameModeMixtoProps> = ({
                             : selectedTF === true
                             ? 'bg-rose-500 text-white'
                             : 'bg-white text-[#2d2a26] opacity-60'
+                          : !hasGameStarted
+                          ? 'bg-stone-300 text-stone-500 cursor-not-allowed'
                           : 'bg-[#2a9d8f] hover:bg-[#264653] text-white active:translate-y-0.5'
                       }`}
                     >
@@ -840,7 +992,7 @@ export const GameModeMixto: React.FC<GameModeMixtoProps> = ({
                     </button>
 
                     <button
-                      disabled={Boolean(currentRecord)}
+                      disabled={!hasGameStarted || Boolean(currentRecord)}
                       onClick={() => handleSelectTF(false)}
                       className={`p-5 border-2 border-[#2d2a26] font-serif font-black text-xl uppercase tracking-wider shadow-bento flex items-center justify-center gap-3 transition-all ${
                         currentRecord || showOfficialAnswer
@@ -849,6 +1001,8 @@ export const GameModeMixto: React.FC<GameModeMixtoProps> = ({
                             : selectedTF === false
                             ? 'bg-rose-500 text-white'
                             : 'bg-white text-[#2d2a26] opacity-60'
+                          : !hasGameStarted
+                          ? 'bg-stone-300 text-stone-500 cursor-not-allowed'
                           : 'bg-[#d62828] hover:bg-[#a51d1d] text-white active:translate-y-0.5'
                       }`}
                     >
@@ -883,8 +1037,8 @@ export const GameModeMixto: React.FC<GameModeMixtoProps> = ({
                     <div className="relative flex-1 w-full">
                       <input
                         type="number"
-                        disabled={Boolean(currentRecord)}
-                        placeholder={`Ingresa tu valor en ${activeCard.unit || 'número'}...`}
+                        disabled={!hasGameStarted || Boolean(currentRecord)}
+                        placeholder={!hasGameStarted ? 'Presiona Play para comenzar...' : `Ingresa tu valor en ${activeCard.unit || 'número'}...`}
                         value={userNumericInput}
                         onChange={(e) => setUserNumericInput(e.target.value)}
                         onKeyDown={(e) => {
@@ -895,7 +1049,7 @@ export const GameModeMixto: React.FC<GameModeMixtoProps> = ({
                     </div>
 
                     <button
-                      disabled={Boolean(currentRecord) || !userNumericInput}
+                      disabled={!hasGameStarted || Boolean(currentRecord) || !userNumericInput}
                       onClick={handleEvaluateNumeric}
                       className="w-full sm:w-auto px-6 py-3 bg-[#1d3557] hover:bg-[#2a9d8f] disabled:opacity-40 text-white font-extrabold text-xs uppercase tracking-widest border-2 border-[#2d2a26] shadow-bento transition-all"
                     >
@@ -935,7 +1089,7 @@ export const GameModeMixto: React.FC<GameModeMixtoProps> = ({
                       return (
                         <button
                           key={item.id}
-                          disabled={Boolean(currentRecord)}
+                          disabled={!hasGameStarted || Boolean(currentRecord)}
                           onClick={() => handleToggleSequenceLetter(item.letter)}
                           className={`p-4 border-2 border-[#2d2a26] shadow-bento-sm flex items-start gap-3 text-left transition-all ${
                             isSelected
@@ -987,7 +1141,7 @@ export const GameModeMixto: React.FC<GameModeMixtoProps> = ({
                     </div>
 
                     <button
-                      disabled={Boolean(currentRecord) || userSequenceOrder.length !== sequenceItems.length}
+                      disabled={!hasGameStarted || Boolean(currentRecord) || userSequenceOrder.length !== sequenceItems.length}
                       onClick={handleEvaluateSequence}
                       className="px-5 py-2.5 bg-[#1d3557] hover:bg-[#2a9d8f] disabled:opacity-40 text-white font-extrabold text-xs uppercase tracking-widest border-2 border-[#2d2a26] shadow-bento"
                     >
@@ -1012,15 +1166,17 @@ export const GameModeMixto: React.FC<GameModeMixtoProps> = ({
 
                 <div className="flex items-center gap-2">
                   <button
+                    disabled={!hasGameStarted || Boolean(currentRecord)}
                     onClick={() => handleRecordAnswer(true, activeCard.points)}
-                    className="px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs uppercase tracking-wider border border-[#2d2a26] shadow-bento-sm flex items-center gap-1"
+                    className="px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 disabled:opacity-40 text-white font-extrabold text-xs uppercase tracking-wider border border-[#2d2a26] shadow-bento-sm flex items-center gap-1"
                   >
                     <CheckCircle2 className="w-4 h-4" /> Correcta (+{activeCard.points} pts)
                   </button>
 
                   <button
+                    disabled={!hasGameStarted || Boolean(currentRecord)}
                     onClick={() => handleRecordAnswer(false, 0)}
-                    className="px-3.5 py-1.5 bg-rose-600 hover:bg-rose-700 text-white font-extrabold text-xs uppercase tracking-wider border border-[#2d2a26] shadow-bento-sm flex items-center gap-1"
+                    className="px-3.5 py-1.5 bg-rose-600 hover:bg-rose-700 disabled:opacity-40 text-white font-extrabold text-xs uppercase tracking-wider border border-[#2d2a26] shadow-bento-sm flex items-center gap-1"
                   >
                     <XCircle className="w-4 h-4" /> Incorrecta (0 pts)
                   </button>

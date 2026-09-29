@@ -76,7 +76,7 @@ export default function App() {
               <Shield className="w-4 h-4 text-amber-400 inline" /> CRUCE DE LOS ANDES
             </span>
             <span className="px-2 py-0.5 bg-[#1d3557] text-white border border-white/20 font-extrabold uppercase text-[10px] tracking-widest truncate">
-              {activeTab === 'mixto' && '🔀 Modo Mixto (7 Min)'}
+              {activeTab === 'mixto' && '🔀 Modo Mixto (3, 5 o 7 Min)'}
               {activeTab === 'mazo' && '🎴 Mazo Didáctico'}
             </span>
 
@@ -141,7 +141,7 @@ export default function App() {
                   }`}
                 >
                   <Shuffle className="w-4 h-4 text-amber-300" />
-                  <span>Modo Mixto (7 Min)</span>
+                  <span>Modo Mixto (3, 5 o 7 Min)</span>
                 </button>
 
                 <button
@@ -267,10 +267,10 @@ export default function App() {
             <div className="space-y-3 text-xs leading-relaxed overflow-y-auto max-h-[60vh] pr-2 custom-scrollbar font-sans">
               <div className="p-3.5 bg-[#f3efe6] border-2 border-[#2d2a26] shadow-bento-sm space-y-1.5">
                 <div className="inline-block bg-[#d62828] text-white px-2 py-0.5 text-[10px] uppercase font-bold tracking-widest">
-                  🔀 Modo Mixto (Temporizador de 7 Minutos)
+                  🔀 Modo Mixto (3, 5 o 7 Minutos)
                 </div>
                 <p className="text-[#2d2a26] leading-relaxed font-semibold">
-                  • <strong>Desafío Contrarreloj:</strong> Tienes 7 minutos (o 5 min, 3 min o modo libre) para responder el mazo aleatorio de preguntas del Cruce de los Andes.<br />
+                  • <strong>Desafío Contrarreloj:</strong> Elige entre 3 minutos, 5 minutos o 7 minutos para responder las cartas del Cruce de los Andes. El tiempo no comienza hasta seleccionar el formato y presionar Play.<br />
                   • <strong>Puntuación y Registro:</strong> Cada acierto acumula puntos tácticos según la dificultad de la carta.<br />
                   • <strong>Informe y Puntaje Final:</strong> Al terminar el tiempo o al presionar "Puntaje Final", se presenta el balance completo con respuestas correctas, incorrectas, porcentaje de efectividad y tu rango de honor militar.
                 </p>
