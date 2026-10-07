@@ -175,9 +175,15 @@ export const GameModeVerdaderoFalso: React.FC<GameModeVerdaderoFalsoProps> = ({ 
           </span>
         </div>
 
-        <h3 className="text-2xl font-black text-[#2d2a26] mb-6 leading-snug">
-          "{activeCard.question}"
-        </h3>
+        <div className="mb-6">
+          <span className="text-xs sm:text-sm font-black uppercase tracking-wider text-[#2a9d8f] bg-emerald-50 px-3 py-1.5 border border-[#2a9d8f] inline-flex items-center gap-2 mb-2 shadow-bento-sm">
+            <Shield className="w-4 h-4 text-[#2a9d8f]" />
+            Afirmación Histórica (Evaluar si es Verdadera o Falsa)
+          </span>
+          <h3 className="text-xl sm:text-3xl md:text-4xl font-serif font-black text-[#2d2a26] leading-snug">
+            "{activeCard.question.replace(/[¿?]/g, '').trim()}"
+          </h3>
+        </div>
 
         {gameState === 'answer' && (
           <div className="space-y-6">

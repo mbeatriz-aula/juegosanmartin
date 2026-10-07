@@ -141,7 +141,7 @@ export default function App() {
                   }`}
                 >
                   <Shuffle className="w-4 h-4 text-amber-300" />
-                  <span>Modo Mixto (3, 5 o 7 Min)</span>
+                  <span>Modo Mixto (3 Min)</span>
                 </button>
 
                 <button
@@ -216,7 +216,7 @@ export default function App() {
       )}
 
       {/* MAIN GAME CONTENT AREA */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-2 sm:px-4 py-2 sm:py-3">
+      <main className="flex-1 max-w-7xl 2xl:max-w-[1600px] w-full mx-auto px-2 sm:px-5 md:px-7 py-3 sm:py-5">
         {activeTab === 'mixto' && (
           <GameModeMixto
             cards={cards}
@@ -267,12 +267,12 @@ export default function App() {
             <div className="space-y-3 text-xs leading-relaxed overflow-y-auto max-h-[60vh] pr-2 custom-scrollbar font-sans">
               <div className="p-3.5 bg-[#f3efe6] border-2 border-[#2d2a26] shadow-bento-sm space-y-1.5">
                 <div className="inline-block bg-[#d62828] text-white px-2 py-0.5 text-[10px] uppercase font-bold tracking-widest">
-                  🔀 Modo Mixto (3, 5 o 7 Minutos)
+                  🔀 Modo Mixto (3 Minutos Contrarreloj)
                 </div>
                 <p className="text-[#2d2a26] leading-relaxed font-semibold">
-                  • <strong>Desafío Contrarreloj:</strong> Elige entre 3 minutos, 5 minutos o 7 minutos para responder las cartas del Cruce de los Andes. El tiempo no comienza hasta seleccionar el formato y presionar Play.<br />
+                  • <strong>Desafío Contrarreloj de 3 Minutos:</strong> Partida de 3 minutos para responder las cartas del Cruce de los Andes. El tiempo no comenzará a correr hasta presionar el botón PLAY.<br />
                   • <strong>Puntuación y Registro:</strong> Cada acierto acumula puntos tácticos según la dificultad de la carta.<br />
-                  • <strong>Informe y Puntaje Final:</strong> Al terminar el tiempo o al presionar "Puntaje Final", se presenta el balance completo con respuestas correctas, incorrectas, porcentaje de efectividad y tu rango de honor militar.
+                  • <strong>Informe y Puntaje Final:</strong> Al terminar el tiempo o al finalizar las cartas, se presenta el balance completo con respuestas correctas, incorrectas, porcentaje de efectividad y tu rango de honor militar.
                 </p>
               </div>
 
