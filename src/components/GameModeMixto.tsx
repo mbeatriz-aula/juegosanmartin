@@ -246,10 +246,10 @@ export const GameModeMixto: React.FC<GameModeMixtoProps> = ({
 
     const target = activeCard.numericAnswer || 0;
 
-    // Margen de tolerancia: si la carta no especifica o es 0, otorgar al menos un 15% o 1 unidad
+    // Margen de tolerancia ampliado: si la carta no especifica o es 0, otorgar al menos un 25% o 3 unidades
     const margin = typeof activeCard.toleranceMargin === 'number' && activeCard.toleranceMargin > 0
       ? activeCard.toleranceMargin
-      : Math.max(1, Math.round(target * 0.15));
+      : Math.max(3, Math.round(target * 0.25));
 
     // Direct exact match
     const isExact = num === target;
@@ -268,10 +268,10 @@ export const GameModeMixto: React.FC<GameModeMixtoProps> = ({
     } else if (isUnderAndClose) {
       // Si está muy cerca pero por debajo o igual
       earnedPoints = activeCard.points;
-      desc += ` (¡Acierto por aproximación válida! Margen ±${margin})`;
+      desc += ` (¡Acierto por aproximación válida! Margen amplio ±${margin})`;
     } else if (isOverClose) {
       earnedPoints = activeCard.points;
-      desc += ` (¡Acierto por aproximación válida! Margen ±${margin})`;
+      desc += ` (¡Acierto por aproximación válida! Margen amplio ±${margin})`;
     } else if (num > target) {
       earnedPoints = 0;
       desc += ` (Se pasó del margen permitido: valor real ${target} ±${margin})`;
@@ -402,15 +402,15 @@ export const GameModeMixto: React.FC<GameModeMixtoProps> = ({
             </span>
           </div>
 
-          {/* Cartel Gigante de PLAY */}
+          {/* Cartel Gigante de PLAY (Único botón de play) */}
           <button
             onClick={handleTogglePlayPause}
-            className={`px-5 sm:px-7 py-2.5 sm:py-3 border-2 border-[#2d2a26] text-xs sm:text-sm md:text-base font-black uppercase tracking-wider flex items-center gap-2 shadow-bento transition-all active:translate-y-0.5 cursor-pointer ${
+            className={`px-5 sm:px-7 py-2.5 sm:py-3 border-2 border-[#2d2a26] text-xs sm:text-sm md:text-base font-black uppercase tracking-wider flex items-center gap-2 shadow-bento transition-all active:translate-y-0.5 cursor-pointer ring-2 ring-emerald-300 ${
               !hasGameStarted
                 ? 'bg-[#2a9d8f] hover:bg-[#21867a] text-white animate-bounce'
                 : isTimerRunning
-                ? 'bg-amber-400 hover:bg-amber-300 text-stone-900'
-                : 'bg-[#2a9d8f] hover:bg-[#21867a] text-white'
+                ? 'bg-amber-400 hover:bg-amber-300 text-stone-900 ring-amber-300'
+                : 'bg-[#2a9d8f] hover:bg-[#21867a] text-white animate-bounce'
             }`}
             title={
               !hasGameStarted
@@ -422,7 +422,7 @@ export const GameModeMixto: React.FC<GameModeMixtoProps> = ({
           >
             {!hasGameStarted ? (
               <>
-                <Play className="w-5 h-5 fill-current text-white" />
+                <Play className="w-5 h-5 fill-current text-amber-300" />
                 <span>¡DARLE PLAY!</span>
               </>
             ) : isTimerRunning ? (
@@ -432,19 +432,19 @@ export const GameModeMixto: React.FC<GameModeMixtoProps> = ({
               </>
             ) : (
               <>
-                <Play className="w-5 h-5 fill-current" />
-                <span>PLAY</span>
+                <Play className="w-5 h-5 fill-current text-amber-300" />
+                <span>REANUDAR PLAY</span>
               </>
             )}
           </button>
 
-          {/* Cartel Gigante de REINICIAR */}
+          {/* Cartel Gigante de REINICIAR (Con color y rebote como el de Play) */}
           <button
             onClick={handleResetGame}
-            className="px-4 sm:px-6 py-2.5 sm:py-3 bg-[#f3efe6] hover:bg-[#d62828] hover:text-white text-[#2d2a26] border-2 border-[#2d2a26] font-black text-xs sm:text-sm md:text-base uppercase tracking-wider flex items-center gap-2 shadow-bento transition-all active:translate-y-0.5 cursor-pointer"
+            className="px-5 sm:px-7 py-2.5 sm:py-3 bg-[#d62828] hover:bg-[#b01f1f] text-white border-2 border-[#2d2a26] font-black text-xs sm:text-sm md:text-base uppercase tracking-wider flex items-center gap-2 shadow-bento transition-all active:translate-y-0.5 cursor-pointer animate-bounce ring-2 ring-rose-300"
             title="Reiniciar cronómetro a 3 minutos y volver al inicio"
           >
-            <RotateCcw className="w-5 h-5" />
+            <RotateCcw className="w-5 h-5 text-amber-300" />
             <span>REINICIAR</span>
           </button>
         </div>
@@ -687,32 +687,29 @@ export const GameModeMixto: React.FC<GameModeMixtoProps> = ({
       ) : (
         /* PRESENTACIÓN DE PREGUNTA ACTIVA - ESPACIO Y TIPOGRAFÍA OPTIMIZADA PANTALLA COMPLETA */
         <div className="space-y-3 sm:space-y-4">
-          {/* NOTICE BEFORE STARTING GAME: FORMAT 3 MIN & PLAY PROMPT */}
+          {/* NOTICE BEFORE STARTING GAME: FORMAT 3 MIN & PLAY PROMPT (Sin botón duplicado para no marear) */}
           {!hasGameStarted && (
-            <div className="bg-[#fefae0] border-2 border-[#2d2a26] p-4 sm:p-6 shadow-bento flex flex-col sm:flex-row sm:items-center justify-between gap-4 animate-fade-in text-sm">
+            <div className="bg-[#fefae0] border-2 border-[#2d2a26] p-4 sm:p-5 shadow-bento flex flex-col sm:flex-row sm:items-center justify-between gap-4 animate-fade-in text-sm">
               <div className="flex items-center gap-3 sm:gap-4">
-                <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-amber-400 border-2 border-[#2d2a26] flex items-center justify-center shrink-0 shadow-bento-sm">
-                  <Timer className="w-7 h-7 sm:w-8 sm:h-8 text-[#2d2a26]" />
+                <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-amber-400 border-2 border-[#2d2a26] flex items-center justify-center shrink-0 shadow-bento-sm">
+                  <Timer className="w-6 h-6 sm:w-7 sm:h-7 text-[#2d2a26]" />
                 </div>
                 <div>
-                  <span className="text-xs font-black uppercase tracking-wider bg-[#d62828] text-white px-2.5 py-1 border border-[#2d2a26] inline-block mb-1 shadow-bento-sm">
+                  <span className="text-xs font-black uppercase tracking-wider bg-[#d62828] text-white px-2.5 py-0.5 border border-[#2d2a26] inline-block mb-1 shadow-bento-sm">
                     Partida de 3 Minutos
                   </span>
                   <div className="text-base sm:text-xl font-serif font-black uppercase text-[#2d2a26]">
-                    Dale PLAY para iniciar el cronómetro y comenzar a responder.
+                    Presiona el botón de PLAY arriba para iniciar el cronómetro.
                   </div>
-                  <span className="text-stone-700 text-xs sm:text-sm font-semibold">El tiempo de 3 minutos comenzará a descontar al presionar Play.</span>
+                  <span className="text-stone-700 text-xs sm:text-sm font-semibold">
+                    Tienes 3 minutos para responder la mayor cantidad de cartas didácticas posibles.
+                  </span>
                 </div>
               </div>
 
-              <button
-                onClick={() => handleStartGame()}
-                className="w-full sm:w-auto px-7 py-3.5 sm:py-4 bg-[#2a9d8f] hover:bg-[#21867a] text-white font-black text-sm sm:text-base uppercase tracking-wider border-2 border-[#2d2a26] shadow-bento flex items-center justify-center gap-2.5 transition-all active:translate-y-0.5 shrink-0 animate-bounce cursor-pointer ring-2 ring-emerald-300"
-                title="Presiona aquí para iniciar los 3 minutos"
-              >
-                <Play className="w-5 h-5 sm:w-6 sm:h-6 fill-current text-amber-300" />
-                <span>¡DARLE PLAY PARA COMENZAR!</span>
-              </button>
+              <div className="flex items-center gap-2 text-xs sm:text-sm font-black uppercase tracking-wider bg-white px-4 py-2.5 border-2 border-[#2d2a26] shadow-bento-sm text-[#1d3557] shrink-0 self-start sm:self-center">
+                <span className="text-emerald-700 font-black">⬆️ Toca ¡DARLE PLAY! arriba</span>
+              </div>
             </div>
           )}
 
@@ -1006,7 +1003,7 @@ export const GameModeMixto: React.FC<GameModeMixtoProps> = ({
                     <div className="bg-amber-100 border border-amber-600 px-3 py-1 text-xs sm:text-sm font-bold text-amber-900 flex items-center gap-1.5 shadow-bento-sm">
                       <Info className="w-4 h-4 text-amber-800 shrink-0" />
                       <span>
-                        Margen de tolerancia: ±{activeCard.toleranceMargin || Math.max(1, Math.round((activeCard.numericAnswer || 0) * 0.15))}
+                        Margen de tolerancia ampliado: ±{activeCard.toleranceMargin || Math.max(3, Math.round((activeCard.numericAnswer || 0) * 0.25))}
                       </span>
                     </div>
                   </div>
