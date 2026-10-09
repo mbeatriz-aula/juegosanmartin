@@ -216,7 +216,7 @@ export default function App() {
       )}
 
       {/* MAIN GAME CONTENT AREA */}
-      <main className="flex-1 max-w-7xl 2xl:max-w-[1600px] w-full mx-auto px-2 sm:px-5 md:px-7 py-3 sm:py-5">
+      <main className="flex-1 max-w-7xl 2xl:max-w-[1600px] w-full mx-auto px-2 sm:px-4 md:px-6 py-1.5 sm:py-2.5">
         {activeTab === 'mixto' && (
           <GameModeMixto
             cards={cards}
